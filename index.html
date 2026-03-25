@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>TopUP e-Wallet & Pulsa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface2: #1a1a24;
+            --surface3: #22222f;
+            --border: rgba(255,255,255,0.07);
+            --border2: rgba(255,255,255,0.12);
+            --accent: #6c63ff;
+            --accent2: #a78bfa;
+            --accent-glow: rgba(108,99,255,0.25);
+            --green: #22c55e;
+            --green-glow: rgba(34,197,94,0.2);
+            --text: #f0f0f8;
+            --text2: #9090a8;
+            --text3: #5a5a72;
+            --danger: #f87171;
+            --wa: #25D366;
+            --gold: #f59e0b;
+            --gold-bg: rgba(245,158,11,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-user-select: none; }
+        input, textarea, [contenteditable="true"] { user-select: text; -webkit-user-select: text; }
+
+        body {
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px 12px 40px;
+            background-image: radial-gradient(ellipse 60% 50% at 50% -10%, rgba(108,99,255,0.15) 0%, transparent 70%);
+        }
+
+        #app {
+            max-width: 430px;
+            width: 100%;
+            background: var(--surface);
+            border-radius: 28px;
+            border: 1px solid var(--border2);
+            overflow: hidden;
+            box-shadow: 0 32px 64px -12px rgba(0,0,0,0.7), 0 0 0 1px rgba(108,99,255,0.1);
+        }
+
+        /* ── HEADER ── */
+        .app-header {
+            background: linear-gradient(135deg, #13131e 0%, #1a1428 100%);
+            padding: 24px 22px 20px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .app-header::before { content: ''; position: absolute; top: -30px; right: -30px; width: 130px; height: 130px; background: radial-gradient(circle, rgba(108,99,255,0.3) 0%, transparent 70%); pointer-events: none; }
+        .app-header::after { content: ''; position: absolute; bottom: -20px; left: 20px; width: 80px; height: 80px; background: radial-gradient(circle, rgba(167,139,250,0.15) 0%, transparent 70%); pointer-events: none; }
+        .header-top { display: flex; align-items: center; gap: 12px; }
+        .header-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; color: white; box-shadow: 0 4px 16px rgba(108,99,255,0.5); flex-shrink: 0; }
+        .header-text h1 { font-size: 1.05rem; font-weight: 800; color: var(--text); letter-spacing: -0.3px; line-height: 1.2; }
+        .header-text .sub { font-size: 0.75rem; color: var(--text2); margin-top: 2px; font-weight: 500; }
+        .header-badge { margin-left: auto; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: var(--green); font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.3px; white-space: nowrap; }
+
+        /* ── KATEGORI TABS (HOME) ── */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 16px 18px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .cat-tab {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 12px 12px 0 0;
+            border: 1px solid var(--border);
+            border-bottom: none;
+            background: var(--surface2);
+            color: var(--text3);
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: all 0.18s;
+            position: relative;
+        }
+        .cat-tab.active {
+            background: var(--surface3);
+            color: var(--text);
+            border-color: var(--accent);
+        }
+        .cat-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0; right: 0;
+            height: 1px;
+            background: var(--surface);
+        }
+        .cat-tab i { color: var(--accent2); font-size: 0.9rem; }
+        .cat-tab.active i { color: var(--accent); }
+        .cat-tab .tab-count {
+            background: var(--accent-glow);
+            color: var(--accent2);
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 1px 6px;
+            border-radius: 20px;
+        }
+        .cat-tab.active .tab-count { background: var(--accent); color: white; }
+
+        /* ── SEARCH BAR ── */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            transition: border-color 0.15s;
+        }
+        .search-bar:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .search-bar i { color: var(--text3); font-size: 0.85rem; flex-shrink: 0; }
+        .search-bar input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            color: var(--text);
+            font-size: 0.88rem;
+            font-weight: 500;
+            min-width: 0;
+        }
+        .search-bar input::placeholder { color: var(--text3); }
+        .search-clear {
+            background: var(--surface3);
+            border: none;
+            border-radius: 6px;
+            width: 22px; height: 22px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: var(--text2);
+            font-size: 0.7rem;
+            flex-shrink: 0;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .search-clear.visible { opacity: 1; }
+
+        /* ── VIEWS & TRANSITIONS ── */
+        #app-views-container { position: relative; overflow: hidden; }
+        .view {
+            padding: 18px 18px 28px;
+            animation: slideInRight 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .view.slide-out-left { animation: slideOutLeft 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .view.slide-in-left { animation: slideInLeft 0.28s cubic-bezier(0.4, 0, 0.2, 1); }
+        .view.slide-in-right { animation: slideInRight 0.28s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(32px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-32px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-32px); } }
+        .hidden { display: none !important; }
+
+        /* ── SECTION LABEL ── */
+        .section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
+        .section-label i { color: var(--accent2); font-size: 0.75rem; }
+        .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+        .section-label-action { margin-left: auto; color: var(--accent2); font-size: 0.7rem; cursor: pointer; text-transform: none; letter-spacing: 0; font-weight: 600; }
+        .section-label-action:hover { color: var(--accent); }
+
+        /* ── WALLET GRID ── */
+        .ewallet-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .wallet-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px 8px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .wallet-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 40%, rgba(108,99,255,0.04)); opacity: 0; transition: opacity 0.18s; }
+        .wallet-card:hover { border-color: var(--accent); background: var(--surface3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,99,255,0.2); }
+        .wallet-card:hover::before { opacity: 1; }
+        .wallet-card:active { transform: scale(0.96); }
+
+        /* ── SKELETON LOADING ── */
+        .wallet-logo-wrap { position: relative; width: 52px; height: 52px; }
+        .wallet-logo {
+            width: 52px; height: 52px;
+            object-fit: contain;
+            border-radius: 14px;
+            pointer-events: none;
+            -webkit-user-drag: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            position: absolute;
+            top: 0; left: 0;
+        }
+        .wallet-logo.loaded { opacity: 1; }
+        .skeleton-logo {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(90deg, var(--surface3) 25%, var(--surface2) 50%, var(--surface3) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            position: absolute;
+            top: 0; left: 0;
+            transition: opacity 0.3s ease;
+        }
+        .skeleton-logo.hidden-skeleton { opacity: 0; pointer-events: none; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .wallet-name { font-weight: 700; color: var(--text); font-size: 0.78rem; text-align: center; line-height: 1.3; }
+
+        /* ── PROMO BADGE ── */
+        .promo-badge {
+            position: absolute;
+            top: 8px; right: 8px;
+            font-size: 0.55rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            z-index: 2;
+        }
+        .promo-badge.terlaris { background: rgba(239,68,68,0.18); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+        .promo-badge.hemat { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+        .promo-badge.baru { background: var(--accent-glow); color: var(--accent2); border: 1px solid rgba(108,99,255,0.3); }
+
+        /* ── FAVORIT STRIP ── */
+        .favorit-strip {
+            margin-bottom: 16px;
+        }
+        .favorit-section-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .favorit-items {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .favorit-items::-webkit-scrollbar { display: none; }
+        .fav-chip {
+            flex-shrink: 0;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 7px 12px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text2);
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .fav-chip:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-bg); }
+        .fav-chip i { color: var(--gold); font-size: 0.7rem; }
+        .fav-chip .fav-chip-wallet { color: var(--text3); font-size: 0.7rem; font-weight: 500; }
+        .no-fav { color: var(--text3); font-size: 0.78rem; font-style: italic; padding: 4px 0; }
+
+        /* ── RIWAYAT ── */
+        .riwayat-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+        .riwayat-item {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .riwayat-item:hover { border-color: var(--border2); background: var(--surface3); }
+        .riwayat-item:active { transform: scale(0.98); }
+        .riwayat-logo { width: 36px; height: 36px; border-radius: 10px; object-fit: contain; flex-shrink: 0; background: var(--surface3); }
+        .riwayat-info { flex: 1; min-width: 0; }
+        .riwayat-top { font-weight: 700; font-size: 0.85rem; color: var(--text); }
+        .riwayat-bot { font-size: 0.72rem; color: var(--text2); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+        .riwayat-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text3); }
+        .riwayat-price { font-weight: 800; color: var(--accent2); font-size: 0.85rem; flex-shrink: 0; }
+        .repeat-btn { background: var(--surface3); border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; font-size: 0.72rem; font-weight: 700; color: var(--text2); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+        .repeat-btn:hover { background: var(--accent-glow); color: var(--accent2); border-color: var(--accent); }
+        .empty-riwayat { color: var(--text3); font-size: 0.78rem; font-style: italic; padding: 4px 0; }
+
+        /* ── BACK ROW ── */
+        .back-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .back-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text2); font-size: 0.9rem; cursor: pointer; width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
+        .back-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--border2); }
+        .selected-wallet-badge { display: flex; align-items: center; gap: 8px; background: var(--surface2); padding: 5px 14px 5px 8px; border-radius: 30px; border: 1px solid var(--border2); }
+        .selected-wallet-badge img { width: 24px; height: 24px; border-radius: 8px; pointer-events: none; -webkit-user-drag: none; }
+        .selected-wallet-badge span { font-weight: 700; color: var(--text); font-size: 0.85rem; }
+        .back-row-title { font-weight: 700; color: var(--text); font-size: 0.95rem; }
+
+        /* ── FIELD GROUP ── */
+        .field-group { background: var(--surface2); border-radius: 18px; padding: 14px; margin-bottom: 16px; border: 1px solid var(--border); }
+        .field-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .field-label i { color: var(--accent2); }
+        .phone-field, .name-field-wrap { display: flex; align-items: center; gap: 8px; background: var(--surface3); border-radius: 12px; padding: 4px 4px 4px 14px; border: 1px solid var(--border); transition: border-color 0.15s; }
+        .phone-field:focus-within, .name-field-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .phone-field input, .name-field-wrap input { flex: 1; border: none; padding: 12px 0; font-size: 0.95rem; background: transparent; outline: none; min-width: 0; width: 100%; color: var(--text); font-weight: 600; }
+        .phone-field input::placeholder, .name-field-wrap input::placeholder { color: var(--text3); font-weight: 400; }
+        .contact-btn { background: var(--accent); color: white; border: none; border-radius: 9px; padding: 9px 14px; font-weight: 700; font-size: 0.78rem; display: flex; align-items: center; gap: 5px; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.15s; letter-spacing: 0.2px; }
+        .contact-btn:hover { background: var(--accent2); transform: scale(1.02); }
+        .error-msg { color: var(--danger); font-size: 0.75rem; margin-top: 6px; padding-left: 4px; font-weight: 500; }
+
+        /* ── INLINE CONTROLS ── */
+        .inline-controls { display: flex; gap: 10px; margin: 0 0 16px; }
+        .ewallet-nav-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; font-weight: 700; font-size: 0.82rem; color: var(--text2); display: flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.15s; flex-shrink: 0; }
+        .ewallet-nav-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--border2); }
+        .ewallet-nav-btn i { color: var(--accent2); }
+        .kategori-dropdown { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; flex: 1; display: flex; align-items: center; transition: border-color 0.15s; }
+        .kategori-dropdown:focus-within { border-color: var(--accent); }
+        .kategori-dropdown select { border: none; background: transparent; font-weight: 700; font-size: 0.85rem; color: var(--text); outline: none; width: 100%; cursor: pointer; }
+        .kategori-dropdown select option { background: #1a1a24; color: var(--text); }
+
+        /* ── NOMINAL SEARCH ── */
+        .nominal-search-wrap { margin-bottom: 12px; }
+
+        /* ── PRODUCT LIST ── */
+        .product-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; max-height: 340px; overflow-y: auto; padding-right: 2px; }
+        .product-list::-webkit-scrollbar { width: 4px; }
+        .product-list::-webkit-scrollbar-track { background: var(--surface2); border-radius: 4px; }
+        .product-list::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+        .product-item { background: var(--surface2); border-radius: 14px; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--border); transition: all 0.12s; cursor: pointer; text-align: center; gap: 5px; position: relative; }
+        .product-item:hover { border-color: var(--accent); background: var(--surface3); }
+        .product-item.selected { border-color: var(--accent); background: rgba(108,99,255,0.12); box-shadow: 0 0 0 1px var(--accent), 0 4px 16px var(--accent-glow); }
+        .product-nominal { font-weight: 700; color: var(--text); font-size: 0.8rem; line-height: 1.2; }
+        .product-price { color: var(--accent2); font-weight: 700; font-size: 0.72rem; background: rgba(108,99,255,0.1); padding: 2px 7px; border-radius: 20px; white-space: nowrap; }
+        .product-item.selected .product-price { background: var(--accent); color: white; }
+
+        /* ── PRODUCT PROMO BADGE ── */
+        .product-promo {
+            position: absolute;
+            top: 5px; right: 5px;
+            font-size: 0.5rem;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .product-promo.terlaris { background: rgba(239,68,68,0.2); color: #f87171; }
+        .product-promo.hemat { background: rgba(34,197,94,0.2); color: var(--green); }
+
+        /* ── FAVORIT TOGGLE ON PRODUCT ── */
+        .fav-toggle {
+            position: absolute;
+            top: 5px; left: 5px;
+            width: 18px; height: 18px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 0.65rem;
+            color: var(--text3);
+            transition: color 0.15s, transform 0.15s;
+            z-index: 2;
+        }
+        .fav-toggle.is-fav { color: var(--gold); transform: scale(1.2); }
+        .fav-toggle:hover { color: var(--gold); }
+
+        /* ── BUTTONS ── */
+        .next-btn, .buy-btn { background: linear-gradient(135deg, var(--accent), #8b5cf6); border: none; border-radius: 14px; padding: 16px 22px; width: 100%; color: white; font-weight: 800; font-size: 1rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.18s; letter-spacing: 0.3px; box-shadow: 0 8px 24px rgba(108,99,255,0.3); }
+        .next-btn:hover, .buy-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(108,99,255,0.4); }
+        .next-btn:active, .buy-btn:active { transform: scale(0.98); }
+        .next-btn:disabled { background: var(--surface2); color: var(--text3); cursor: not-allowed; box-shadow: none; transform: none; }
+        .buy-btn { background: linear-gradient(135deg, #16a34a, #22c55e); box-shadow: 0 8px 24px var(--green-glow); }
+        .buy-btn:hover { box-shadow: 0 12px 32px rgba(34,197,94,0.4); }
+        .btn-icon-wrap { width: 30px; height: 30px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+
+        /* ── DETAIL VIEW ── */
+        .detail-card { background: var(--surface2); border-radius: 18px; padding: 4px 0; margin-bottom: 16px; border: 1px solid var(--border); overflow: hidden; }
+        .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 16px; border-bottom: 1px solid var(--border); gap: 12px; }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: var(--text2); font-weight: 500; font-size: 0.85rem; }
+        .detail-value { font-weight: 700; color: var(--text); font-size: 0.9rem; text-align: right; }
+        .detail-value.highlight { color: var(--accent2); }
+
+        /* ── ESTIMASI WAKTU ── */
+        .estimasi-strip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(108,99,255,0.08);
+            border: 1px solid rgba(108,99,255,0.2);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 0.8rem;
+            color: var(--accent2);
+            font-weight: 600;
+        }
+        .estimasi-strip i { font-size: 0.85rem; }
+
+        /* ── NAME FIELD in detail ── */
+        .name-field { margin-bottom: 16px; }
+        .name-field .name-field-wrap { background: var(--surface2); }
+
+        /* ── QRIS AREA ── */
+        .qris-area { background: var(--surface2); border-radius: 18px; padding: 20px 16px; text-align: center; border: 1px solid var(--border); margin-bottom: 16px; position: relative; overflow: hidden; }
+        .qris-area::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+        .qris-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 14px; }
+        .qris-area img { max-width: 180px; width: 100%; height: auto; margin: 0 auto 14px; display: block; border-radius: 16px; background: white; padding: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); pointer-events: none; -webkit-user-drag: none; }
+        .qris-amount { font-size: 1.4rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px; }
+        .qris-amount span { color: var(--accent2); }
+
+        /* ── WHATSAPP NOTIF ── */
+        .whatsapp-notif { background: rgba(37,211,102,0.12); border: 1px solid rgba(37,211,102,0.3); color: var(--green); padding: 13px 16px; border-radius: 14px; font-size: 0.85rem; text-align: center; margin-top: 12px; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .whatsapp-notif i { font-size: 1.2rem; }
+        .whatsapp-notif small { color: var(--text2); font-weight: 500; font-size: 0.78rem; }
+
+        /* ── NO RESULTS ── */
+        .no-results { grid-column: 1 / -1; text-align: center; padding: 24px; color: var(--text3); font-size: 0.85rem; }
+        .no-results i { font-size: 1.5rem; display: block; margin-bottom: 8px; }
+
+        /* ── KONFIRMASI MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            animation: fadeInOverlay 0.2s ease;
+        }
+        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+        .modal-box {
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: 24px;
+            padding: 28px 24px;
+            max-width: 340px;
+            width: 100%;
+            box-shadow: 0 32px 64px rgba(0,0,0,0.7);
+            animation: slideUpModal 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        @keyframes slideUpModal { from { opacity: 0; transform: translateY(24px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .modal-icon { width: 52px; height: 52px; background: rgba(37,211,102,0.15); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.5rem; color: var(--wa); }
+        .modal-title { font-size: 1.05rem; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 8px; }
+        .modal-body { font-size: 0.82rem; color: var(--text2); text-align: center; margin-bottom: 20px; line-height: 1.6; }
+        .modal-summary { background: var(--surface2); border-radius: 14px; padding: 12px 16px; margin-bottom: 20px; }
+        .modal-summary-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; }
+        .modal-summary-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+        .modal-summary-label { color: var(--text3); font-size: 0.78rem; }
+        .modal-summary-val { font-weight: 700; color: var(--text); font-size: 0.82rem; }
+        .modal-summary-val.green { color: var(--green); }
+        .modal-actions { display: flex; gap: 10px; }
+        .modal-cancel { flex: 1; padding: 13px; border-radius: 12px; border: 1px solid var(--border2); background: var(--surface2); color: var(--text2); font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: all 0.15s; }
+        .modal-cancel:hover { background: var(--surface3); color: var(--text); }
+        .modal-confirm { flex: 2; padding: 13px; border-radius: 12px; border: none; background: linear-gradient(135deg, #16a34a, #22c55e); color: white; font-weight: 800; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.15s; box-shadow: 0 4px 16px var(--green-glow); }
+        .modal-confirm:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(34,197,94,0.4); }
+
+        /* ── SCROLLBAR GLOBAL ── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+
+        /* ── HELP BUTTON ── */
+        .help-btn {
+            background: rgba(108,99,255,0.12);
+            border: 1px solid rgba(108,99,255,0.25);
+            color: var(--accent2);
+            width: 34px; height: 34px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.18s;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+        .help-btn:hover {
+            background: rgba(108,99,255,0.22);
+            border-color: var(--accent);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* ── BANTUAN MODAL ── */
+        .bantuan-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 2000;
+            padding: 0;
+            animation: fadeInOverlay 0.2s ease;
+        }
+        .bantuan-sheet {
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: 28px 28px 0 0;
+            width: 100%;
+            max-width: 430px;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 0 0 32px;
+            animation: slideUpSheet 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -16px 48px rgba(0,0,0,0.6);
+        }
+        @keyframes slideUpSheet {
+            from { transform: translateY(100%); opacity: 0.6; }
+            to   { transform: translateY(0);    opacity: 1; }
+        }
+        .bantuan-handle {
+            width: 40px; height: 4px;
+            background: var(--surface3);
+            border-radius: 4px;
+            margin: 14px auto 0;
+        }
+        .bantuan-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .bantuan-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .bantuan-header-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 13px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; color: white;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+        .bantuan-header-text h2 { font-size: 1rem; font-weight: 800; color: var(--text); }
+        .bantuan-header-text p  { font-size: 0.73rem; color: var(--text2); margin-top: 1px; }
+        .bantuan-close {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text2);
+            width: 32px; height: 32px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.15s;
+        }
+        .bantuan-close:hover { background: var(--surface3); color: var(--text); }
+
+        /* ── STEPS ── */
+        .bantuan-section { padding: 20px 22px 0; }
+        .bantuan-section-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text3);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .bantuan-section-title i { color: var(--accent2); }
+        .bantuan-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+        .steps-list { display: flex; flex-direction: column; gap: 10px; }
+        .step-item {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .step-num {
+            width: 28px; height: 28px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+            margin-top: 1px;
+            box-shadow: 0 2px 8px var(--accent-glow);
+        }
+        .step-content { flex: 1; }
+        .step-title { font-weight: 700; font-size: 0.88rem; color: var(--text); margin-bottom: 2px; }
+        .step-desc  { font-size: 0.78rem; color: var(--text2); line-height: 1.5; }
+
+        /* ── JAM OPS ── */
+        .jam-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .jam-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 13px 14px;
+        }
+        .jam-day   { font-size: 0.75rem; font-weight: 700; color: var(--text2); margin-bottom: 4px; }
+        .jam-time  { font-size: 0.9rem; font-weight: 800; color: var(--text); }
+        .jam-time.open  { color: var(--green); }
+        .jam-time.close { color: var(--danger); }
+        .jam-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-top: 5px;
+        }
+        .jam-status.buka  { background: rgba(34,197,94,0.12); color: var(--green); }
+        .jam-status.tutup { background: rgba(248,113,113,0.12); color: var(--danger); }
+
+        /* ── KONTAK ADMIN ── */
+        .kontak-list { display: flex; flex-direction: column; gap: 8px; }
+        .kontak-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 13px 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .kontak-item:hover { border-color: var(--border2); background: var(--surface3); transform: translateX(2px); }
+        .kontak-icon {
+            width: 38px; height: 38px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .kontak-icon.wa    { background: rgba(37,211,102,0.15); color: var(--wa); }
+        .kontak-icon.phone { background: rgba(108,99,255,0.12); color: var(--accent2); }
+        .kontak-info { flex: 1; }
+        .kontak-label { font-size: 0.72rem; color: var(--text2); font-weight: 500; }
+        .kontak-value { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+        .kontak-arrow { color: var(--text3); font-size: 0.8rem; }
+
+        /* ── BANTUAN FOOTER ── */
+        .bantuan-footer {
+            margin: 20px 22px 0;
+            background: rgba(108,99,255,0.07);
+            border: 1px solid rgba(108,99,255,0.15);
+            border-radius: 14px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: var(--text2);
+            line-height: 1.5;
+        }
+        .bantuan-footer i { color: var(--accent2); font-size: 1rem; flex-shrink: 0; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="app-header">
+        <div class="header-top">
+            <div class="header-icon"><i class="fas fa-bolt"></i></div>
+            <div class="header-text">
+                <h1>TOP-UP PULSA & E-WALLET</h1>
+                <div class="sub">Belanja Aman, Cepat, Garansi Uang Kembali</div>
+            </div>
+            <div class="header-badge">✓ RESMI</div>
+            <button class="help-btn" id="helpBtn" title="Bantuan"><i class="fas fa-circle-question"></i></button>
+        </div>
+    </div>
+
+    <div id="app-views-container">
+        <!-- HOME VIEW -->
+        <div id="homeView" class="view">
+            <!-- Kategori Tabs -->
+            <div class="category-tabs" id="categoryTabs" style="margin: -18px -18px 18px; padding: 0 18px;">
+                <button class="cat-tab active" data-cat="ewallet">
+                    <i class="fas fa-wallet"></i> E-Wallet
+                    <span class="tab-count" id="ewalletCount">5</span>
+                </button>
+                <button class="cat-tab" data-cat="pulsa">
+                    <i class="fas fa-sim-card"></i> Pulsa
+                    <span class="tab-count" id="pulsaCount">7</span>
+                </button>
+            </div>
+
+            <!-- Favorit -->
+            <div class="favorit-strip" id="favoritStrip">
+                <div class="section-label" style="margin-bottom: 10px;">
+                    <i class="fas fa-star"></i> Favorit
+                    <span class="section-label-action" id="clearFavBtn" style="display:none;" onclick="clearAllFavorites()">Hapus semua</span>
+                </div>
+                <div class="favorit-items" id="favoritItems">
+                    <span class="no-fav">Belum ada favorit</span>
+                </div>
+            </div>
+
+            <!-- Riwayat -->
+            <div id="riwayatSection">
+                <div class="section-label"><i class="fas fa-clock-rotate-left"></i> Riwayat Pesanan</div>
+                <div class="riwayat-list" id="riwayatList">
+                    <span class="empty-riwayat">Belum ada riwayat</span>
+                </div>
+            </div>
+
+            <div class="section-label"><i class="fas fa-hand-pointer"></i> Pilih Produk</div>
+            <div class="ewallet-grid" id="ewalletGrid"></div>
+        </div>
+
+        <!-- NOMINAL VIEW -->
+        <div id="nominalView" class="view hidden">
+            <div class="back-row">
+                <button class="back-btn" id="backToHomeBtn"><i class="fas fa-arrow-left"></i></button>
+                <div id="selectedWalletBadge" class="selected-wallet-badge"></div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label"><i class="fas fa-mobile-alt"></i> Nomor Handphone</div>
+                <div class="phone-field">
+                    <input type="tel" id="phoneInput" placeholder="08xxxxxxx" value="">
+                    <button class="contact-btn" id="contactPickerBtn"><i class="fas fa-address-book"></i> Kontak</button>
+                </div>
+                <div id="phoneError" class="error-msg"></div>
+            </div>
+
+            <div class="inline-controls">
+                <button class="ewallet-nav-btn" id="pilihEwalletBtn"><i class="fas fa-grid-2"></i> Ganti</button>
+                <div class="kategori-dropdown">
+                    <select id="kategoriSelect"></select>
+                </div>
+            </div>
+
+            <!-- Pencarian Nominal -->
+            <div class="nominal-search-wrap">
+                <div class="search-bar" id="nominalSearchBar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="nominalSearch" placeholder="Cari nominal... (misal: 50.000)">
+                    <button class="search-clear" id="nominalSearchClear"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+
+            <div class="section-label"><i class="fas fa-tag"></i> Pilih Nominal</div>
+            <div id="productListContainer" class="product-list"></div>
+
+            <button class="next-btn" id="goToDetailBtn" disabled>
+                <span>LANJUT KE DETAIL</span>
+                <div class="btn-icon-wrap"><i class="fas fa-arrow-right"></i></div>
+            </button>
+        </div>
+
+        <!-- DETAIL VIEW -->
+        <div id="detailView" class="view hidden">
+            <div class="back-row">
+                <button class="back-btn" id="backToNominalBtn"><i class="fas fa-arrow-left"></i></button>
+                <span class="back-row-title">Detail Pesanan</span>
+            </div>
+
+            <div class="estimasi-strip">
+                <i class="fas fa-clock"></i>
+                Estimasi proses: <strong>1–5 menit</strong>
+            </div>
+
+            <div class="detail-card" id="detailCard"></div>
+
+            <div class="name-field">
+                <div class="name-field-wrap">
+                    <input type="text" id="customerNameInput" placeholder="Nama kamu (opsional)">
+                </div>
+            </div>
+
+            <div class="section-label"><i class="fas fa-qrcode"></i> Pembayaran QRIS</div>
+            <div class="qris-area">
+                <div class="qris-label">Scan untuk membayar</div>
+                <img src="https://i.postimg.cc/FKBx2LFj/quick-response-code-indonesia-standard-qris-logo-png-seeklogo-391791.png" alt="QRIS Standard" id="qrisImage">
+                <div class="qris-amount">Rp <span id="qrisAmount"></span></div>
+            </div>
+
+            <button class="buy-btn" id="beliSekarangBtn">
+                <span>BELI SEKARANG</span>
+                <div class="btn-icon-wrap"><i class="fab fa-whatsapp"></i></div>
+            </button>
+            <div id="whatsappNotif" class="whatsapp-notif hidden"></div>
+        </div>
+    </div>
+</div>
+
+<!-- BANTUAN MODAL -->
+<div id="bantuanModal" class="bantuan-modal hidden">
+    <div class="bantuan-sheet">
+        <div class="bantuan-handle"></div>
+        <div class="bantuan-header">
+            <div class="bantuan-header-left">
+                <div class="bantuan-header-icon"><i class="fas fa-headset"></i></div>
+                <div class="bantuan-header-text">
+                    <h2>Pusat Bantuan</h2>
+                    <p>Cara order, kontak & jam layanan</p>
+                </div>
+            </div>
+            <button class="bantuan-close" id="bantuanClose"><i class="fas fa-times"></i></button>
+        </div>
+
+        <!-- CARA ORDER -->
+        <div class="bantuan-section">
+            <div class="bantuan-section-title"><i class="fas fa-list-ol"></i> Cara Order</div>
+            <div class="steps-list">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Pilih Kategori & Produk</div>
+                        <div class="step-desc">Pilih tab E-Wallet atau Pulsa, lalu klik produk yang ingin kamu isi saldo-nya.</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Masukkan Nomor HP</div>
+                        <div class="step-desc">Isi nomor tujuan (format 08xx atau 628xx). Kamu bisa ambil dari daftar kontak langsung.</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Pilih Nominal</div>
+                        <div class="step-desc">Pilih nominal yang diinginkan. Gunakan kolom pencarian jika produknya banyak.</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <div class="step-title">Cek Detail & Bayar QRIS</div>
+                        <div class="step-desc">Pastikan semua data benar, lalu scan QRIS untuk melakukan pembayaran.</div>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">5</div>
+                    <div class="step-content">
+                        <div class="step-title">Kirim via WhatsApp</div>
+                        <div class="step-desc">Klik "Beli Sekarang" — pesanan otomatis terkirim ke admin via WA. Proses 1–5 menit.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JAM OPERASIONAL -->
+        <div class="bantuan-section" style="margin-top: 22px;">
+            <div class="bantuan-section-title"><i class="fas fa-clock"></i> Jam Operasional</div>
+            <div class="jam-grid">
+                <div class="jam-card">
+                    <div class="jam-day">Senin – Jumat</div>
+                    <div class="jam-time open">08.00 – 22.00</div>
+                    <span class="jam-status buka"><i class="fas fa-circle" style="font-size:0.45rem;"></i> Buka</span>
+                </div>
+                <div class="jam-card">
+                    <div class="jam-day">Sabtu – Minggu</div>
+                    <div class="jam-time open">09.00 – 21.00</div>
+                    <span class="jam-status buka"><i class="fas fa-circle" style="font-size:0.45rem;"></i> Buka</span>
+                </div>
+                <div class="jam-card" style="grid-column: 1 / -1;">
+                    <div class="jam-day">Hari Libur Nasional</div>
+                    <div class="jam-time" style="color:var(--text2);">Menyesuaikan</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KONTAK ADMIN -->
+        <div class="bantuan-section" style="margin-top: 22px;">
+            <div class="bantuan-section-title"><i class="fas fa-address-book"></i> Kontak Admin</div>
+            <div class="kontak-list">
+                <a class="kontak-item" id="kontakWA" href="#" onclick="return false;">
+                    <div class="kontak-icon wa"><i class="fab fa-whatsapp"></i></div>
+                    <div class="kontak-info">
+                        <div class="kontak-label">WhatsApp Admin</div>
+                        <div class="kontak-value">+62 851-7827-1400</div>
+                    </div>
+                    <i class="fas fa-chevron-right kontak-arrow"></i>
+                </a>
+                <a class="kontak-item" id="kontakCall" href="tel:+6285178271400">
+                    <div class="kontak-icon phone"><i class="fas fa-phone"></i></div>
+                    <div class="kontak-info">
+                        <div class="kontak-label">Telepon / SMS</div>
+                        <div class="kontak-value">+62 851-7827-1400</div>
+                    </div>
+                    <i class="fas fa-chevron-right kontak-arrow"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="bantuan-footer">
+            <i class="fas fa-shield-halved"></i>
+            <span>Transaksi dijamin aman. Jika dalam <strong>15 menit</strong> pesanan belum diproses, segera hubungi admin.</span>
+        </div>
+    </div>
+</div>
+
+<!-- KONFIRMASI MODAL -->
+<div id="waModal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <div class="modal-icon"><i class="fab fa-whatsapp"></i></div>
+        <div class="modal-title">Konfirmasi Pesanan</div>
+        <div class="modal-body">Pesanan kamu akan dikirim via WhatsApp ke admin kami. Pastikan data sudah benar.</div>
+        <div class="modal-summary" id="modalSummary"></div>
+        <div class="modal-actions">
+            <button class="modal-cancel" id="modalCancel">Batal</button>
+            <button class="modal-confirm" id="modalConfirm"><i class="fab fa-whatsapp"></i> Kirim via WA</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const CONFIG = { WHATSAPP_NUMBER: '6285178271400' };
+
+    // ── DATA ──
+    const ewalletData = [
+        { id: 'dana', name: 'Dana', cat: 'ewallet', badge: 'terlaris', logo: 'https://i.postimg.cc/tJRsXrgY/c033e66fcd9f58766_GStory_1773534013595.png', products: [
+            { nominal: 'Dana 1.000', price: 1500 }, { nominal: 'Dana 2.000', price: 2500 }, { nominal: 'Dana 3.000', price: 3500 }, { nominal: 'Dana 4.000', price: 4500 }, { nominal: 'Dana 5.000', price: 5500 }, { nominal: 'Dana 6.000', price: 6500 }, { nominal: 'Dana 7.000', price: 7500 }, { nominal: 'Dana 8.000', price: 8500 }, { nominal: 'Dana 9.000', price: 9500 }, { nominal: 'Dana 10.000', price: 10500 }, { nominal: 'Dana 15.000', price: 15500 }, { nominal: 'Dana 20.000', price: 20500 }, { nominal: 'Dana 25.000', price: 25500 }, { nominal: 'Dana 30.000', price: 30500 }, { nominal: 'Dana 35.000', price: 35500 }, { nominal: 'Dana 40.000', price: 40500 }, { nominal: 'Dana 45.000', price: 45500 }, { nominal: 'Dana 50.000', price: 50500 }, { nominal: 'Dana 55.000', price: 55500 }, { nominal: 'Dana 60.000', price: 60500 }, { nominal: 'Dana 65.000', price: 65500 }, { nominal: 'Dana 70.000', price: 70500 }, { nominal: 'Dana 75.000', price: 75500 }, { nominal: 'Dana 80.000', price: 80500 }, { nominal: 'Dana 85.000', price: 85500 }, { nominal: 'Dana 90.000', price: 90500 }, { nominal: 'Dana 95.000', price: 95500 }, { nominal: 'Dana 100.000', price: 100500 }, { nominal: 'Dana 125.000', price: 125500 }, { nominal: 'Dana 150.000', price: 150500 }, { nominal: 'Dana 200.000', price: 200500 }, { nominal: 'Dana 250.000', price: 250500 }, { nominal: 'Dana 300.000', price: 300500 }, { nominal: 'Dana 400.000', price: 400500 }, { nominal: 'Dana 500.000', price: 500500 }, { nominal: 'Dana 600.000', price: 600500 }, { nominal: 'Dana 700.000', price: 700500 }, { nominal: 'Dana 800.000', price: 800500 }, { nominal: 'Dana 900.000', price: 900500 }, { nominal: 'Dana 1.000.000', price: 1000500 }
+        ]},
+        { id: 'gopay', name: 'Gopay', cat: 'ewallet', badge: 'terlaris', logo: 'https://i.postimg.cc/GtMH9kB9/489885e41161849591_GStory_1773534055071.png', products: [
+            { nominal: 'Gopay 1.000', price: 2300 }, { nominal: 'Gopay 2.000', price: 3300 }, { nominal: 'Gopay 3.000', price: 4300 }, { nominal: 'Gopay 4.000', price: 5300 }, { nominal: 'Gopay 5.000', price: 6300 }, { nominal: 'Gopay 6.000', price: 7300 }, { nominal: 'Gopay 7.000', price: 8300 }, { nominal: 'Gopay 8.000', price: 9300 }, { nominal: 'Gopay 9.000', price: 10300 }, { nominal: 'Gopay 10.000', price: 10810 }, { nominal: 'Gopay 15.000', price: 15810 }, { nominal: 'Gopay 20.000', price: 20810 }, { nominal: 'Gopay 25.000', price: 25810 }, { nominal: 'Gopay 30.000', price: 30810 }, { nominal: 'Gopay 35.000', price: 35810 }, { nominal: 'Gopay 40.000', price: 40810 }, { nominal: 'Gopay 45.000', price: 45880 }, { nominal: 'Gopay 50.000', price: 50880 }, { nominal: 'Gopay 55.000', price: 55880 }, { nominal: 'Gopay 60.000', price: 60880 }, { nominal: 'Gopay 65.000', price: 65880 }, { nominal: 'Gopay 70.000', price: 70880 }, { nominal: 'Gopay 75.000', price: 75880 }, { nominal: 'Gopay 80.000', price: 80880 }, { nominal: 'Gopay 85.000', price: 85880 }, { nominal: 'Gopay 90.000', price: 90880 }, { nominal: 'Gopay 95.000', price: 95880 }, { nominal: 'Gopay 100.000', price: 100880 }, { nominal: 'Gopay 125.000', price: 126350 }, { nominal: 'Gopay 150.000', price: 151310 }, { nominal: 'Gopay 200.000', price: 201310 }, { nominal: 'Gopay 250.000', price: 251410 }, { nominal: 'Gopay 300.000', price: 301410 }, { nominal: 'Gopay 400.000', price: 401410 }, { nominal: 'Gopay 500.000', price: 501410 }, { nominal: 'Gopay 600.000', price: 601410 }, { nominal: 'Gopay 700.000', price: 701410 }, { nominal: 'Gopay 800.000', price: 801410 }, { nominal: 'Gopay 900.000', price: 901410 }, { nominal: 'Gopay 1.000.000', price: 1001410 }
+        ]},
+        { id: 'shopeepay', name: 'ShopeePay', cat: 'ewallet', badge: 'hemat', logo: 'https://i.postimg.cc/Y0Xhj14Q/268f4d3f4778750667_GStory_1773534100987.png', products: [
+            { nominal: 'ShopeePay 10.000', price: 11180 }, { nominal: 'ShopeePay 15.000', price: 16180 }, { nominal: 'ShopeePay 20.000', price: 21180 }, { nominal: 'ShopeePay 25.000', price: 26180 }, { nominal: 'ShopeePay 30.000', price: 31180 }, { nominal: 'ShopeePay 35.000', price: 36180 }, { nominal: 'ShopeePay 40.000', price: 41180 }, { nominal: 'ShopeePay 45.000', price: 46180 }, { nominal: 'ShopeePay 50.000', price: 51180 }, { nominal: 'ShopeePay 55.000', price: 56180 }, { nominal: 'ShopeePay 60.000', price: 61180 }, { nominal: 'ShopeePay 65.000', price: 66180 }, { nominal: 'ShopeePay 70.000', price: 71180 }, { nominal: 'ShopeePay 75.000', price: 76180 }, { nominal: 'ShopeePay 80.000', price: 81180 }, { nominal: 'ShopeePay 85.000', price: 86180 }, { nominal: 'ShopeePay 90.000', price: 91180 }, { nominal: 'ShopeePay 95.000', price: 96180 }, { nominal: 'ShopeePay 100.000', price: 101180 }, { nominal: 'ShopeePay 125.000', price: 126180 }, { nominal: 'ShopeePay 150.000', price: 151180 }, { nominal: 'ShopeePay 200.000', price: 201180 }, { nominal: 'ShopeePay 250.000', price: 251180 }, { nominal: 'ShopeePay 300.000', price: 301180 }, { nominal: 'ShopeePay 350.000', price: 351180 }, { nominal: 'ShopeePay 400.000', price: 401180 }, { nominal: 'ShopeePay 450.000', price: 451180 }, { nominal: 'ShopeePay 500.000', price: 501180 }, { nominal: 'ShopeePay 550.000', price: 551180 }, { nominal: 'ShopeePay 600.000', price: 601180 }, { nominal: 'ShopeePay 650.000', price: 651180 }, { nominal: 'ShopeePay 700.000', price: 701180 }, { nominal: 'ShopeePay 750.000', price: 751180 }, { nominal: 'ShopeePay 800.000', price: 801180 }, { nominal: 'ShopeePay 850.000', price: 851180 }, { nominal: 'ShopeePay 900.000', price: 901180 }, { nominal: 'ShopeePay 950.000', price: 951180 }, { nominal: 'ShopeePay 1.000.000', price: 1001180 }
+        ]},
+        { id: 'ovo', name: 'OVO', cat: 'ewallet', badge: null, logo: 'https://i.postimg.cc/qBQtmdmg/00b466ff4a0e998249_GStory_1773534162022.png', products: [
+            { nominal: 'OVO 10.000', price: 11470 }, { nominal: 'OVO 15.000', price: 16470 }, { nominal: 'OVO 20.000', price: 21130 }, { nominal: 'OVO 25.000', price: 26130 }, { nominal: 'OVO 30.000', price: 31130 }, { nominal: 'OVO 35.000', price: 36130 }, { nominal: 'OVO 40.000', price: 41130 }, { nominal: 'OVO 45.000', price: 46130 }, { nominal: 'OVO 50.000', price: 51130 }, { nominal: 'OVO 55.000', price: 56130 }, { nominal: 'OVO 60.000', price: 61130 }, { nominal: 'OVO 65.000', price: 66130 }, { nominal: 'OVO 70.000', price: 71130 }, { nominal: 'OVO 75.000', price: 76130 }, { nominal: 'OVO 80.000', price: 81130 }, { nominal: 'OVO 85.000', price: 86130 }, { nominal: 'OVO 90.000', price: 91130 }, { nominal: 'OVO 95.000', price: 96130 }, { nominal: 'OVO 100.000', price: 101130 }, { nominal: 'OVO 125.000', price: 126130 }, { nominal: 'OVO 150.000', price: 151130 }, { nominal: 'OVO 200.000', price: 201130 }, { nominal: 'OVO 250.000', price: 251130 }, { nominal: 'OVO 300.000', price: 301130 }, { nominal: 'OVO 350.000', price: 351130 }, { nominal: 'OVO 400.000', price: 401130 }, { nominal: 'OVO 450.000', price: 451130 }, { nominal: 'OVO 500.000', price: 501130 }, { nominal: 'OVO 600.000', price: 601130 }, { nominal: 'OVO 700.000', price: 701130 }, { nominal: 'OVO 800.000', price: 801130 }, { nominal: 'OVO 900.000', price: 901130 }, { nominal: 'OVO 1.000.000', price: 1001130 }
+        ]},
+        { id: 'linkAja', name: 'LinkAja', cat: 'ewallet', badge: null, logo: 'https://i.postimg.cc/CL1RX6tD/bc8d04b39c5b973830_GStory_1773534499083.jpg', products: [
+            { nominal: 'LinkAja 10.000', price: 10760 }, { nominal: 'LinkAja 15.000', price: 15760 }, { nominal: 'LinkAja 20.000', price: 20760 }, { nominal: 'LinkAja 25.000', price: 25760 }, { nominal: 'LinkAja 30.000', price: 30760 }, { nominal: 'LinkAja 35.000', price: 35760 }, { nominal: 'LinkAja 40.000', price: 40760 }, { nominal: 'LinkAja 45.000', price: 45760 }, { nominal: 'LinkAja 50.000', price: 50760 }, { nominal: 'LinkAja 55.000', price: 55760 }, { nominal: 'LinkAja 60.000', price: 60760 }, { nominal: 'LinkAja 65.000', price: 65760 }, { nominal: 'LinkAja 70.000', price: 70760 }, { nominal: 'LinkAja 75.000', price: 75760 }, { nominal: 'LinkAja 80.000', price: 80760 }, { nominal: 'LinkAja 85.000', price: 85760 }, { nominal: 'LinkAja 90.000', price: 90760 }, { nominal: 'LinkAja 95.000', price: 95760 }, { nominal: 'LinkAja 100.000', price: 100760 }, { nominal: 'LinkAja 125.000', price: 125760 }, { nominal: 'LinkAja 150.000', price: 150760 }, { nominal: 'LinkAja 200.000', price: 200800 }, { nominal: 'LinkAja 250.000', price: 251010 }, { nominal: 'LinkAja 300.000', price: 301040 }, { nominal: 'LinkAja 400.000', price: 401010 }, { nominal: 'LinkAja 500.000', price: 501010 }, { nominal: 'LinkAja 600.000', price: 601010 }, { nominal: 'LinkAja 700.000', price: 701010 }, { nominal: 'LinkAja 800.000', price: 801040 }, { nominal: 'LinkAja 900.000', price: 901010 }, { nominal: 'LinkAja 1.000.000', price: 1001010 }
+        ]},
+        { id: 'maxim', name: 'Maxim Driver', cat: 'ewallet', badge: 'baru', logo: 'https://i.postimg.cc/mrJxZh2T/1ff34cc41a06107341_GStory_1773534798904.png', products: [
+            { nominal: 'Maxim Driver 5.000', price: 7790 }, { nominal: 'Maxim Driver 7.000', price: 9790 }, { nominal: 'Maxim Driver 10.000', price: 12790 }, { nominal: 'Maxim Driver 15.000', price: 17790 }, { nominal: 'Maxim Driver 17.000', price: 19790 }, { nominal: 'Maxim Driver 20.000', price: 22790 }, { nominal: 'Maxim Driver 25.000', price: 27790 }, { nominal: 'Maxim Driver 27.000', price: 29790 }, { nominal: 'Maxim Driver 30.000', price: 32790 }, { nominal: 'Maxim Driver 35.000', price: 37790 }, { nominal: 'Maxim Driver 40.000', price: 42790 }, { nominal: 'Maxim Driver 42.000', price: 44790 }, { nominal: 'Maxim Driver 45.000', price: 47950 }, { nominal: 'Maxim Driver 47.000', price: 49790 }, { nominal: 'Maxim Driver 50.000', price: 52790 }, { nominal: 'Maxim Driver 67.000', price: 69790 }, { nominal: 'Maxim Driver 70.000', price: 72790 }, { nominal: 'Maxim Driver 97.000', price: 100190 }, { nominal: 'Maxim Driver 100.000', price: 103190 }, { nominal: 'Maxim Driver 125.000', price: 128190 }, { nominal: 'Maxim Driver 147.000', price: 150190 }, { nominal: 'Maxim Driver 197.000', price: 200190 }, { nominal: 'Maxim Driver 247.000', price: 250190 }, { nominal: 'Maxim Driver 300.000', price: 303190 }
+        ]},
+        { id: 'xl', name: 'XL Transfer', cat: 'pulsa', badge: 'hemat', logo: 'https://i.postimg.cc/mr9mbTmd/upscalemedia_transformed.jpg', products: [
+            { nominal: 'XL 5.000', price: 6590 }, { nominal: 'XL 10.000', price: 11570 }, { nominal: 'XL 15.000', price: 16490 }, { nominal: 'XL 20.000', price: 21490 }, { nominal: 'XL 25.000', price: 26220 }, { nominal: 'XL 30.000', price: 31490 }, { nominal: 'XL 35.000', price: 35940 }, { nominal: 'XL 40.000', price: 41090 }, { nominal: 'XL 45.000', price: 45540 }, { nominal: 'XL 50.000', price: 51110 }, { nominal: 'XL 55.000', price: 55680 }, { nominal: 'XL 60.000', price: 60790 }, { nominal: 'XL 65.000', price: 65290 }, { nominal: 'XL 70.000', price: 70190 }, { nominal: 'XL 75.000', price: 75110 }, { nominal: 'XL 80.000', price: 80570 }, { nominal: 'XL 85.000', price: 85090 }, { nominal: 'XL 90.000', price: 89590 }, { nominal: 'XL 95.000', price: 94240 }, { nominal: 'XL 100.000', price: 101220 }, { nominal: 'XL 150.000', price: 149390 }, { nominal: 'XL 200.000', price: 196140 }, { nominal: 'XL 300.000', price: 293840 }, { nominal: 'XL 400.000', price: 397540 }, { nominal: 'XL 500.000', price: 493140 }
+        ]},
+        { id: 'three', name: 'Three Transfer', cat: 'pulsa', badge: null, logo: 'https://i.postimg.cc/RVjfvK2z/upscalemedia-transformed-1-Copy.jpg', products: [
+            { nominal: 'Three 10.000', price: 10620 }, { nominal: 'Three 20.000', price: 19950 }, { nominal: 'Three 25.000', price: 25070 }, { nominal: 'Three 30.000', price: 29710 }, { nominal: 'Three 50.000', price: 48640 }, { nominal: 'Three 55.000', price: 53380 }, { nominal: 'Three 60.000', price: 57890 }, { nominal: 'Three 65.000', price: 62570 }, { nominal: 'Three 70.000', price: 67080 }, { nominal: 'Three 75.000', price: 71680 }, { nominal: 'Three 80.000', price: 76270 }, { nominal: 'Three 85.000', price: 80970 }, { nominal: 'Three 90.000', price: 85460 }, { nominal: 'Three 95.000', price: 90160 }, { nominal: 'Three 100.000', price: 96480 }, { nominal: 'Three 150.000', price: 142490 }, { nominal: 'Three 200.000', price: 188930 }
+        ]},
+        { id: 'telkomsel', name: 'Telkomsel Transfer', cat: 'pulsa', badge: 'terlaris', logo: 'https://i.postimg.cc/yx2JYCQ3/download.jpg', products: [
+            { nominal: 'Tsel 10.000', price: 12200 }, { nominal: 'Tsel 15.000', price: 17010 }, { nominal: 'Tsel 20.000', price: 22470 }, { nominal: 'Tsel 25.000', price: 27080 }, { nominal: 'Tsel 30.000', price: 31680 }, { nominal: 'Tsel 35.000', price: 36130 }, { nominal: 'Tsel 40.000', price: 40890 }, { nominal: 'Tsel 45.000', price: 45410 }, { nominal: 'Tsel 50.000', price: 50900 }, { nominal: 'Tsel 55.000', price: 55470 }, { nominal: 'Tsel 60.000', price: 59920 }, { nominal: 'Tsel 65.000', price: 64570 }, { nominal: 'Tsel 70.000', price: 69120 }, { nominal: 'Tsel 75.000', price: 73680 }, { nominal: 'Tsel 80.000', price: 78230 }, { nominal: 'Tsel 85.000', price: 82790 }, { nominal: 'Tsel 90.000', price: 87340 }, { nominal: 'Tsel 95.000', price: 91900 }, { nominal: 'Tsel 100.000', price: 99700 }, { nominal: 'Tsel 110.000', price: 108810 }, { nominal: 'Tsel 120.000', price: 117920 }, { nominal: 'Tsel 125.000', price: 122470 }, { nominal: 'Tsel 140.000', price: 136140 }, { nominal: 'Tsel 145.000', price: 140690 }, { nominal: 'Tsel 150.000', price: 145250 }, { nominal: 'Tsel 200.000', price: 195350 }, { nominal: 'Tsel 225.000', price: 210890 }, { nominal: 'Tsel 250.000', price: 232990 }, { nominal: 'Tsel 275.000', price: 255290 }, { nominal: 'Tsel 300.000', price: 281690 }, { nominal: 'Tsel 350.000', price: 325690 }, { nominal: 'Tsel 450.000', price: 413690 }, { nominal: 'Tsel 500.000', price: 462970 }
+        ]},
+        { id: 'axis', name: 'Axis Transfer', cat: 'pulsa', badge: null, logo: 'https://i.postimg.cc/SsvRDppT/IMG-20260315-232520.jpg', products: [
+            { nominal: 'Axis 5.000', price: 7090 }, { nominal: 'Axis 10.000', price: 11350 }, { nominal: 'Axis 15.000', price: 17140 }, { nominal: 'Axis 20.000', price: 20570 }, { nominal: 'Axis 20.000b', price: 21340 }, { nominal: 'Axis 30.000', price: 32140 }, { nominal: 'Axis 40.000', price: 40990 }, { nominal: 'Axis 50.000', price: 51010 }, { nominal: 'Axis 60.000', price: 61010 }, { nominal: 'Axis 70.000', price: 70440 }, { nominal: 'Axis 80.000', price: 79940 }, { nominal: 'Axis 90.000', price: 89540 }, { nominal: 'Axis 100.000', price: 101260 }, { nominal: 'Axis 150.000', price: 149560 }, { nominal: 'Axis 200.000', price: 197260 }
+        ]},
+        { id: 'indosat', name: 'Indosat Transfer', cat: 'pulsa', badge: null, logo: 'https://i.postimg.cc/ry7CwBtx/329306702t.jpg', products: [
+            { nominal: 'Indosat 10.000', price: 10870 }, { nominal: 'Indosat 20.000', price: 20380 }, { nominal: 'Indosat 25.000', price: 25630 }, { nominal: 'Indosat 30.000', price: 30390 }, { nominal: 'Indosat 35.000', price: 35110 }, { nominal: 'Indosat 40.000', price: 39900 }, { nominal: 'Indosat 45.000', price: 44530 }, { nominal: 'Indosat 50.000', price: 49790 }, { nominal: 'Indosat 55.000', price: 54370 }, { nominal: 'Indosat 60.000', price: 59230 }, { nominal: 'Indosat 65.000', price: 63790 }, { nominal: 'Indosat 70.000', price: 68470 }, { nominal: 'Indosat 75.000', price: 73270 }, { nominal: 'Indosat 80.000', price: 78070 }, { nominal: 'Indosat 85.000', price: 82790 }, { nominal: 'Indosat 90.000', price: 87490 }, { nominal: 'Indosat 95.000', price: 92210 }, { nominal: 'Indosat 100.000', price: 98800 }, { nominal: 'Indosat 150.000', price: 145930 }, { nominal: 'Indosat 200.000', price: 193130 }
+        ]},
+        { id: 'smartfren', name: 'Smartfren Transfer', cat: 'pulsa', badge: null, logo: 'https://i.postimg.cc/JzLNbjx7/697256868i.jpg', products: [
+            { nominal: 'SF 25.000', price: 25230 }, { nominal: 'SF 30.000', price: 30070 }, { nominal: 'SF 35.000', price: 34780 }, { nominal: 'SF 40.000', price: 39230 }, { nominal: 'SF 45.000', price: 43780 }, { nominal: 'SF 50.000', price: 49230 }, { nominal: 'SF 55.000', price: 54430 }, { nominal: 'SF 60.000', price: 58980 }, { nominal: 'SF 65.000', price: 63700 }, { nominal: 'SF 70.000', price: 68350 }, { nominal: 'SF 75.000', price: 72980 }, { nominal: 'SF 80.000', price: 77580 }, { nominal: 'SF 85.000', price: 82250 }, { nominal: 'SF 90.000', price: 86850 }, { nominal: 'SF 95.000', price: 91450 }, { nominal: 'SF 100.000', price: 96100 }
+        ]},
+        { id: 'byu', name: 'by.U Transfer', cat: 'pulsa', badge: null, logo: 'https://i.postimg.cc/N0NRqSc9/983693495o.jpg', products: [
+            { nominal: 'byU 30.000', price: 30660 }, { nominal: 'byU 35.000', price: 35210 }, { nominal: 'byU 40.000', price: 39770 }, { nominal: 'byU 45.000', price: 44320 }, { nominal: 'byU 50.000', price: 49370 }, { nominal: 'byU 55.000', price: 53820 }, { nominal: 'byU 60.000', price: 58480 }, { nominal: 'byU 65.000', price: 63030 }, { nominal: 'byU 70.000', price: 67490 }, { nominal: 'byU 75.000', price: 72040 }, { nominal: 'byU 80.000', price: 76590 }, { nominal: 'byU 85.000', price: 81150 }, { nominal: 'byU 90.000', price: 85700 }, { nominal: 'byU 95.000', price: 90260 }, { nominal: 'byU 100.000', price: 96890 }, { nominal: 'byU 125.000', price: 119660 }, { nominal: 'byU 150.000', price: 142430 }, { nominal: 'byU 200.000', price: 190640 }, { nominal: 'byU 300.000', price: 294790 }, { nominal: 'byU 500.000', price: 484870 }
+        ]}
+    ];
+
+    // ── STATE ──
+    let currentView = 'home';
+    let selectedEwallet = null;
+    let selectedProduct = null;
+    let phoneNumber = '';
+    let currentCategory = 'ewallet';
+    let favorites = JSON.parse(localStorage.getItem('topup_favorites') || '[]'); // [{walletId, nominal, price}]
+    let riwayat = JSON.parse(localStorage.getItem('topup_riwayat') || '[]'); // [{walletId, walletName, logo, nominal, price, hp, ts}]
+
+    // Prevent copy
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) e.preventDefault(); });
+    document.addEventListener('copy', e => e.preventDefault());
+    document.addEventListener('dragstart', e => { if (e.target.tagName === 'IMG') e.preventDefault(); });
+
+    // ── DOM REFS ──
+    const homeView = document.getElementById('homeView');
+    const nominalView = document.getElementById('nominalView');
+    const detailView = document.getElementById('detailView');
+    const ewalletGrid = document.getElementById('ewalletGrid');
+    const selectedWalletBadge = document.getElementById('selectedWalletBadge');
+    const kategoriSelect = document.getElementById('kategoriSelect');
+    const productListContainer = document.getElementById('productListContainer');
+    const phoneInput = document.getElementById('phoneInput');
+    const phoneError = document.getElementById('phoneError');
+    const contactPickerBtn = document.getElementById('contactPickerBtn');
+    const goToDetailBtn = document.getElementById('goToDetailBtn');
+    const backToHomeBtn = document.getElementById('backToHomeBtn');
+    const pilihEwalletBtn = document.getElementById('pilihEwalletBtn');
+    const backToNominalBtn = document.getElementById('backToNominalBtn');
+    const beliSekarangBtn = document.getElementById('beliSekarangBtn');
+    const detailCard = document.getElementById('detailCard');
+    const qrisAmount = document.getElementById('qrisAmount');
+    const whatsappNotif = document.getElementById('whatsappNotif');
+    const customerNameInput = document.getElementById('customerNameInput');
+    const nominalSearch = document.getElementById('nominalSearch');
+    const nominalSearchClear = document.getElementById('nominalSearchClear');
+    const waModal = document.getElementById('waModal');
+    const modalCancel = document.getElementById('modalCancel');
+    const modalConfirm = document.getElementById('modalConfirm');
+    const modalSummary = document.getElementById('modalSummary');
+    const favoritItems = document.getElementById('favoritItems');
+    const riwayatList = document.getElementById('riwayatList');
+    const clearFavBtn = document.getElementById('clearFavBtn');
+
+    // ── TABS ──
+    document.getElementById('categoryTabs').addEventListener('click', e => {
+        const tab = e.target.closest('.cat-tab');
+        if (!tab) return;
+        document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCategory = tab.dataset.cat;
+        renderHome();
+    });
+
+    function updateTabCounts() {
+        document.getElementById('ewalletCount').textContent = ewalletData.filter(w => w.cat === 'ewallet').length;
+        document.getElementById('pulsaCount').textContent = ewalletData.filter(w => w.cat === 'pulsa').length;
+    }
+
+    // ── VALIDATION ──
+    function validatePhone(number) {
+        const cleaned = number.replace(/\D/g, '');
+        return (cleaned.length >= 10 && cleaned.length <= 13) && (cleaned.startsWith('08') || cleaned.startsWith('628'));
+    }
+    function updatePhoneValidation() {
+        const num = phoneInput.value.trim();
+        if (num && !validatePhone(num)) { phoneError.textContent = 'Nomor harus 08xx atau 628xx (10-13 digit)'; return false; }
+        else { phoneError.textContent = ''; return true; }
+    }
+    phoneInput.addEventListener('input', updatePhoneValidation);
+
+    // ── CONTACT PICKER ──
+    async function pickContact() {
+        if ('contacts' in navigator && 'select' in navigator.contacts) {
+            try {
+                const contacts = await navigator.contacts.select(['tel'], { multiple: false });
+                if (contacts.length > 0 && contacts[0].tel && contacts[0].tel.length > 0) { phoneInput.value = contacts[0].tel[0]; updatePhoneValidation(); } else { fallbackContactPicker(); }
+            } catch (err) { fallbackContactPicker(); }
+        } else { fallbackContactPicker(); }
+    }
+    function fallbackContactPicker() {
+        const dummyContacts = ['087798661202', '081234567890', '085712345678', '089876543210'];
+        let message = 'Pilih nomor kontak (simulasi):\n';
+        dummyContacts.forEach((c, i) => { message += `${i+1}. ${c}\n`; });
+        const input = prompt(message, dummyContacts[0]);
+        if (input && input.trim()) { phoneInput.value = input.trim(); updatePhoneValidation(); }
+    }
+    contactPickerBtn.addEventListener('click', pickContact);
+
+    // ── FAVORITES ──
+    function getFavKey(walletId, nominal) { return walletId + '||' + nominal; }
+    function isFav(walletId, nominal) { return favorites.some(f => getFavKey(f.walletId, f.nominal) === getFavKey(walletId, nominal)); }
+    function saveFavorites() { localStorage.setItem('topup_favorites', JSON.stringify(favorites)); }
+    function toggleFavorite(walletId, nominal, price) {
+        const key = getFavKey(walletId, nominal);
+        const idx = favorites.findIndex(f => getFavKey(f.walletId, f.nominal) === key);
+        if (idx >= 0) { favorites.splice(idx, 1); } else { favorites.unshift({ walletId, nominal, price }); if (favorites.length > 8) favorites = favorites.slice(0, 8); }
+        saveFavorites();
+        renderFavorites();
+        // refresh fav toggles in product list
+        document.querySelectorAll('.fav-toggle').forEach(el => {
+            if (el.dataset.walletId === walletId && el.dataset.nominal === nominal) {
+                el.classList.toggle('is-fav', isFav(walletId, nominal));
+                el.innerHTML = isFav(walletId, nominal) ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+            }
+        });
+    }
+    window.clearAllFavorites = function() { favorites = []; saveFavorites(); renderFavorites(); };
+
+    function renderFavorites() {
+        if (favorites.length === 0) {
+            favoritItems.innerHTML = '<span class="no-fav">Belum ada favorit — bintangi nominal favorit kamu</span>';
+            clearFavBtn.style.display = 'none';
+            return;
+        }
+        clearFavBtn.style.display = '';
+        favoritItems.innerHTML = '';
+        favorites.forEach(f => {
+            const wallet = ewalletData.find(w => w.id === f.walletId);
+            if (!wallet) return;
+            const chip = document.createElement('button');
+            chip.className = 'fav-chip';
+            chip.innerHTML = `<i class="fas fa-star"></i>${f.nominal} <span class="fav-chip-wallet">${wallet.name}</span>`;
+            chip.addEventListener('click', () => {
+                selectedEwallet = wallet;
+                selectedProduct = { nominal: f.nominal, price: f.price };
+                phoneNumber = phoneInput.value.trim();
+                switchView('nominal', 'forward');
+                setTimeout(() => {
+                    // Auto-select the product
+                    document.querySelectorAll('.product-item').forEach(el => {
+                        if (el.dataset.nominal === f.nominal) { el.click(); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+                    });
+                }, 350);
+            });
+            favoritItems.appendChild(chip);
+        });
+    }
+
+    // ── RIWAYAT ──
+    function saveRiwayat() { localStorage.setItem('topup_riwayat', JSON.stringify(riwayat)); }
+    function addRiwayat(entry) {
+        riwayat.unshift(entry);
+        if (riwayat.length > 5) riwayat = riwayat.slice(0, 5);
+        saveRiwayat();
+    }
+    function formatTanggal(ts) {
+        const d = new Date(ts);
+        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+    function renderRiwayat() {
+        if (riwayat.length === 0) {
+            riwayatList.innerHTML = '<span class="empty-riwayat">Belum ada riwayat pesanan</span>';
+            return;
+        }
+        riwayatList.innerHTML = '';
+        riwayat.forEach(r => {
+            const item = document.createElement('div');
+            item.className = 'riwayat-item';
+            item.innerHTML = `
+                <img class="riwayat-logo" src="${r.logo}" alt="${r.walletName}">
+                <div class="riwayat-info">
+                    <div class="riwayat-top">${r.nominal}</div>
+                    <div class="riwayat-bot">
+                        ${r.walletName}
+                        <span class="riwayat-dot"></span>
+                        ${r.hp}
+                        <span class="riwayat-dot"></span>
+                        ${formatTanggal(r.ts)}
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+                    <span class="riwayat-price">Rp ${r.price.toLocaleString('id-ID')}</span>
+                    <button class="repeat-btn">Repeat</button>
+                </div>
+            `;
+            item.querySelector('.repeat-btn').addEventListener('click', e => {
+                e.stopPropagation();
+                const wallet = ewalletData.find(w => w.id === r.walletId);
+                if (!wallet) return;
+                selectedEwallet = wallet;
+                selectedProduct = { nominal: r.nominal, price: r.price };
+                phoneNumber = r.hp;
+                switchView('nominal', 'forward');
+                setTimeout(() => {
+                    phoneInput.value = r.hp;
+                    updatePhoneValidation();
+                    document.querySelectorAll('.product-item').forEach(el => {
+                        if (el.dataset.nominal === r.nominal) { el.click(); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+                    });
+                }, 350);
+            });
+            riwayatList.appendChild(item);
+        });
+    }
+
+    // ── RENDER HOME ──
+    function renderHome() {
+        ewalletGrid.innerHTML = '';
+        const filtered = ewalletData.filter(w => w.cat === currentCategory);
+        filtered.forEach(w => {
+            const card = document.createElement('div');
+            card.className = 'wallet-card';
+            card.dataset.id = w.id;
+
+            let badgeHTML = '';
+            if (w.badge) { badgeHTML = `<span class="promo-badge ${w.badge}">${w.badge === 'terlaris' ? '🔥 Terlaris' : w.badge === 'hemat' ? '💚 Hemat' : '✨ Baru'}</span>`; }
+
+            card.innerHTML = `
+                ${badgeHTML}
+                <div class="wallet-logo-wrap">
+                    <div class="skeleton-logo" id="skel-${w.id}"></div>
+                    <img class="wallet-logo" src="${w.logo}" alt="${w.name}" id="logo-${w.id}">
+                </div>
+                <span class="wallet-name">${w.name}</span>
+            `;
+            // Skeleton loading
+            const img = card.querySelector(`#logo-${w.id}`);
+            const skel = card.querySelector(`#skel-${w.id}`);
+            img.onload = () => { img.classList.add('loaded'); skel.classList.add('hidden-skeleton'); };
+            img.onerror = () => { skel.classList.add('hidden-skeleton'); img.style.opacity = '0.3'; };
+
+            card.addEventListener('click', () => {
+                selectedEwallet = w;
+                selectedProduct = null;
+                phoneNumber = phoneInput.value.trim();
+                switchView('nominal', 'forward');
+            });
+            ewalletGrid.appendChild(card);
+        });
+        renderFavorites();
+        renderRiwayat();
+    }
+
+    // ── RENDER NOMINAL ──
+    function renderNominalView() {
+        if (!selectedEwallet) return;
+        selectedWalletBadge.innerHTML = `<img src="${selectedEwallet.logo}" alt="${selectedEwallet.name}"><span>${selectedEwallet.name}</span>`;
+
+        kategoriSelect.innerHTML = '';
+        ewalletData.forEach(w => {
+            const option = document.createElement('option');
+            option.value = w.id;
+            option.textContent = w.name;
+            if (selectedEwallet && w.id === selectedEwallet.id) option.selected = true;
+            kategoriSelect.appendChild(option);
+        });
+        kategoriSelect.onchange = (e) => {
+            const newWallet = ewalletData.find(w => w.id === e.target.value);
+            if (newWallet) { selectedEwallet = newWallet; selectedProduct = null; nominalSearch.value = ''; nominalSearchClear.classList.remove('visible'); renderNominalProducts(); selectedWalletBadge.innerHTML = `<img src="${newWallet.logo}" alt="${newWallet.name}"><span>${newWallet.name}</span>`; }
+        };
+
+        phoneInput.value = phoneNumber;
+        goToDetailBtn.disabled = !selectedProduct;
+        updatePhoneValidation();
+        renderNominalProducts();
+    }
+
+    function renderNominalProducts(filter = '') {
+        productListContainer.innerHTML = '';
+        const products = filter
+            ? selectedEwallet.products.filter(p => p.nominal.toLowerCase().includes(filter.toLowerCase()) || p.price.toString().includes(filter.replace(/\D/g, '')))
+            : selectedEwallet.products;
+
+        if (products.length === 0) {
+            productListContainer.innerHTML = `<div class="no-results"><i class="fas fa-search"></i>Nominal tidak ditemukan</div>`;
+            return;
+        }
+
+        // Mark some as promo for demo
+        const promoMap = {};
+        if (selectedEwallet.products.length > 5) {
+            const midIdx = Math.floor(selectedEwallet.products.length / 2);
+            promoMap[selectedEwallet.products[0]?.nominal] = 'hemat';
+            promoMap[selectedEwallet.products[midIdx]?.nominal] = 'terlaris';
+        }
+
+        products.forEach(p => {
+            const prodDiv = document.createElement('div');
+            prodDiv.className = `product-item ${selectedProduct && selectedProduct.nominal === p.nominal ? 'selected' : ''}`;
+            prodDiv.dataset.nominal = p.nominal;
+
+            const promo = promoMap[p.nominal];
+            const favActive = isFav(selectedEwallet.id, p.nominal);
+
+            prodDiv.innerHTML = `
+                <span class="fav-toggle ${favActive ? 'is-fav' : ''}" data-wallet-id="${selectedEwallet.id}" data-nominal="${p.nominal}" data-price="${p.price}">
+                    ${favActive ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>'}
+                </span>
+                ${promo ? `<span class="product-promo ${promo}">${promo === 'terlaris' ? '🔥' : '💚'} ${promo}</span>` : ''}
+                <span class="product-nominal">${p.nominal}</span>
+                <span class="product-price">Rp ${p.price.toLocaleString('id-ID')}</span>
+            `;
+
+            prodDiv.querySelector('.fav-toggle').addEventListener('click', e => {
+                e.stopPropagation();
+                toggleFavorite(selectedEwallet.id, p.nominal, p.price);
+            });
+
+            prodDiv.addEventListener('click', () => {
+                document.querySelectorAll('.product-item').forEach(el => el.classList.remove('selected'));
+                prodDiv.classList.add('selected');
+                selectedProduct = p;
+                goToDetailBtn.disabled = false;
+            });
+            productListContainer.appendChild(prodDiv);
+        });
+    }
+
+    // Nominal search
+    nominalSearch.addEventListener('input', () => {
+        const val = nominalSearch.value;
+        nominalSearchClear.classList.toggle('visible', val.length > 0);
+        renderNominalProducts(val);
+        if (selectedProduct) {
+            const stillThere = document.querySelector(`.product-item[data-nominal="${selectedProduct.nominal}"]`);
+            if (stillThere) stillThere.classList.add('selected');
+        }
+    });
+    nominalSearchClear.addEventListener('click', () => {
+        nominalSearch.value = '';
+        nominalSearchClear.classList.remove('visible');
+        renderNominalProducts();
+        if (selectedProduct) {
+            const stillThere = document.querySelector(`.product-item[data-nominal="${selectedProduct.nominal}"]`);
+            if (stillThere) stillThere.classList.add('selected');
+        }
+    });
+
+    // ── RENDER DETAIL ──
+    function renderDetailView() {
+        if (!selectedEwallet || !selectedProduct) return;
+        const hp = phoneInput.value.trim();
+        phoneNumber = hp;
+        const name = customerNameInput.value.trim() || '-';
+        detailCard.innerHTML = `
+            <div class="detail-row"><span class="detail-label">Nomor HP</span><span class="detail-value">${hp || '-'}</span></div>
+            <div class="detail-row"><span class="detail-label">Nama</span><span class="detail-value">${name}</span></div>
+            <div class="detail-row"><span class="detail-label">Provider</span><span class="detail-value">${selectedEwallet.name}</span></div>
+            <div class="detail-row"><span class="detail-label">Nominal</span><span class="detail-value">${selectedProduct.nominal}</span></div>
+            <div class="detail-row"><span class="detail-label">Harga</span><span class="detail-value highlight">Rp ${selectedProduct.price.toLocaleString('id-ID')}</span></div>
+            <div class="detail-row"><span class="detail-label">Deskripsi</span><span class="detail-value">Transfer pulsa/saldo</span></div>
+        `;
+        qrisAmount.textContent = selectedProduct.price.toLocaleString('id-ID');
+        whatsappNotif.classList.add('hidden');
+    }
+
+    // ── SWITCH VIEW ──
+    function switchView(view, direction = 'forward') {
+        const views = { home: homeView, nominal: nominalView, detail: detailView };
+        const current = views[currentView];
+        const next = views[view];
+
+        const inClass = direction === 'forward' ? 'slide-in-right' : 'slide-in-left';
+
+        current.classList.add('hidden');
+        currentView = view;
+        next.classList.remove('hidden');
+        next.classList.add(inClass);
+        setTimeout(() => next.classList.remove(inClass), 300);
+
+        if (view === 'home') {
+            selectedEwallet = null; selectedProduct = null;
+            renderHome();
+        } else if (view === 'nominal') {
+            renderNominalView();
+        } else if (view === 'detail') {
+            renderDetailView();
+        }
+    }
+
+    // ── MODAL WHATSAPP ──
+    function showWAModal() {
+        if (!selectedProduct) return;
+        const hp = phoneInput.value.trim();
+        const name = customerNameInput.value.trim() || '-';
+        if (!hp) { phoneInput.focus(); phoneError.textContent = 'Nomor HP harus diisi!'; return; }
+        if (!validatePhone(hp)) { phoneInput.focus(); updatePhoneValidation(); return; }
+
+        modalSummary.innerHTML = `
+            <div class="modal-summary-row"><span class="modal-summary-label">Provider</span><span class="modal-summary-val">${selectedEwallet.name}</span></div>
+            <div class="modal-summary-row"><span class="modal-summary-label">Nominal</span><span class="modal-summary-val">${selectedProduct.nominal}</span></div>
+            <div class="modal-summary-row"><span class="modal-summary-label">Nomor HP</span><span class="modal-summary-val">${hp}</span></div>
+            <div class="modal-summary-row"><span class="modal-summary-label">Total</span><span class="modal-summary-val green">Rp ${selectedProduct.price.toLocaleString('id-ID')}</span></div>
+        `;
+        waModal.classList.remove('hidden');
+    }
+
+    function closeWAModal() { waModal.classList.add('hidden'); }
+
+    waModal.addEventListener('click', e => { if (e.target === waModal) closeWAModal(); });
+    modalCancel.addEventListener('click', closeWAModal);
+    modalConfirm.addEventListener('click', () => { closeWAModal(); doOpenWhatsApp(); });
+
+    function doOpenWhatsApp() {
+        if (!selectedProduct) return;
+        const hp = phoneInput.value.trim();
+        const name = customerNameInput.value.trim() || '-';
+        const message = `🔹 *DETAIL TOPUP* 🔹\nProvider: ${selectedEwallet.name}\nProduk: ${selectedProduct.nominal}\nHarga: Rp ${selectedProduct.price.toLocaleString('id-ID')}\nDeskripsi: Transfer pulsa/saldo\n\nNomor HP: ${hp}\nNama: ${name}`;
+        window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+        whatsappNotif.classList.remove('hidden');
+        whatsappNotif.innerHTML = `<i class="fab fa-whatsapp"></i> Pesanan dikirim via WhatsApp ke +${CONFIG.WHATSAPP_NUMBER}<br><small>${selectedProduct.nominal}</small>`;
+        // Save riwayat
+        addRiwayat({ walletId: selectedEwallet.id, walletName: selectedEwallet.name, logo: selectedEwallet.logo, nominal: selectedProduct.nominal, price: selectedProduct.price, hp: hp, ts: Date.now() });
+    }
+
+    // ── BUTTON EVENTS ──
+    backToHomeBtn.addEventListener('click', () => switchView('home', 'back'));
+    pilihEwalletBtn.addEventListener('click', () => switchView('home', 'back'));
+    backToNominalBtn.addEventListener('click', () => switchView('nominal', 'back'));
+
+    goToDetailBtn.addEventListener('click', () => {
+        if (!selectedProduct) return;
+        const hp = phoneInput.value.trim();
+        if (!hp) { phoneInput.focus(); phoneError.textContent = 'Nomor HP harus diisi!'; return; }
+        if (!validatePhone(hp)) { updatePhoneValidation(); return; }
+        phoneNumber = hp;
+        switchView('detail', 'forward');
+    });
+
+    beliSekarangBtn.addEventListener('click', () => {
+        if (!selectedProduct) { switchView('nominal', 'back'); return; }
+        showWAModal();
+    });
+
+    customerNameInput.addEventListener('input', function() {
+        if (currentView === 'detail') {
+            const name = this.value.trim() || '-';
+            const nameSpan = document.querySelector('.detail-row:nth-child(2) .detail-value');
+            if (nameSpan) nameSpan.textContent = name;
+        }
+    });
+
+    // ── BANTUAN MODAL ──
+    const bantuanModal = document.getElementById('bantuanModal');
+    const bantuanClose = document.getElementById('bantuanClose');
+    const helpBtn      = document.getElementById('helpBtn');
+    const kontakWA     = document.getElementById('kontakWA');
+
+    helpBtn.addEventListener('click', () => bantuanModal.classList.remove('hidden'));
+    bantuanClose.addEventListener('click', () => bantuanModal.classList.add('hidden'));
+    bantuanModal.addEventListener('click', e => { if (e.target === bantuanModal) bantuanModal.classList.add('hidden'); });
+    kontakWA.addEventListener('click', () => {
+        window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent('Halo admin, saya butuh bantuan order top-up.')}`, '_blank');
+    });
+
+    // ── INIT ──
+    updateTabCounts();
+    renderHome();
+})();
+</script>
+</body>
+</html>
