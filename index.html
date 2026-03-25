@@ -68,6 +68,54 @@
         .header-text .sub { font-size: 0.75rem; color: var(--text2); margin-top: 2px; font-weight: 500; }
         .header-badge { margin-left: auto; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: var(--green); font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.3px; white-space: nowrap; }
 
+        /* ── BOTTOM NAV ── */
+        .bottom-nav {
+            display: flex;
+            background: linear-gradient(180deg, #13131e 0%, #0f0f18 100%);
+            border-top: 1px solid var(--border2);
+            padding: 0;
+        }
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 12px 8px 14px;
+            cursor: pointer;
+            transition: all 0.18s;
+            position: relative;
+            border: none;
+            background: transparent;
+            color: var(--text3);
+        }
+        .nav-item.active { color: var(--accent2); }
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 32px; height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 0 0 4px 4px;
+        }
+        .nav-item i { font-size: 1.1rem; transition: transform 0.2s; }
+        .nav-item.active i { transform: scale(1.15); }
+        .nav-item span { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.3px; }
+        .nav-badge {
+            position: absolute;
+            top: 8px; right: calc(50% - 14px);
+            background: var(--gold);
+            color: #000;
+            font-size: 0.55rem;
+            font-weight: 800;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 6px rgba(245,158,11,0.5);
+        }
+
         /* ── KATEGORI TABS (HOME) ── */
         .category-tabs {
             display: flex;
@@ -172,6 +220,10 @@
         @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-32px); } }
         .hidden { display: none !important; }
 
+        /* ── PAGE FADE IN ── */
+        @keyframes pageFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page-anim { animation: pageFadeIn 0.25s cubic-bezier(0.4,0,0.2,1); }
+
         /* ── SECTION LABEL ── */
         .section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 14px; display: flex; align-items: center; gap: 7px; }
         .section-label i { color: var(--accent2); font-size: 0.75rem; }
@@ -245,43 +297,6 @@
         .promo-badge.hemat { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
         .promo-badge.baru { background: var(--accent-glow); color: var(--accent2); border: 1px solid rgba(108,99,255,0.3); }
 
-        /* ── FAVORIT STRIP ── */
-        .favorit-strip {
-            margin-bottom: 16px;
-        }
-        .favorit-section-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .favorit-items {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-        .favorit-items::-webkit-scrollbar { display: none; }
-        .fav-chip {
-            flex-shrink: 0;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 7px 12px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--text2);
-            cursor: pointer;
-            transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-        }
-        .fav-chip:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-bg); }
-        .fav-chip i { color: var(--gold); font-size: 0.7rem; }
-        .fav-chip .fav-chip-wallet { color: var(--text3); font-size: 0.7rem; font-weight: 500; }
-        .no-fav { color: var(--text3); font-size: 0.78rem; font-style: italic; padding: 4px 0; }
-
         /* ── RIWAYAT ── */
         .riwayat-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
         .riwayat-item {
@@ -292,20 +307,38 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            cursor: pointer;
             transition: all 0.15s;
         }
         .riwayat-item:hover { border-color: var(--border2); background: var(--surface3); }
-        .riwayat-item:active { transform: scale(0.98); }
-        .riwayat-logo { width: 36px; height: 36px; border-radius: 10px; object-fit: contain; flex-shrink: 0; background: var(--surface3); }
+        .riwayat-logo { width: 40px; height: 40px; border-radius: 12px; object-fit: contain; flex-shrink: 0; background: var(--surface3); }
         .riwayat-info { flex: 1; min-width: 0; }
         .riwayat-top { font-weight: 700; font-size: 0.85rem; color: var(--text); }
-        .riwayat-bot { font-size: 0.72rem; color: var(--text2); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+        .riwayat-bot { font-size: 0.72rem; color: var(--text2); margin-top: 3px; display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
         .riwayat-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text3); }
         .riwayat-price { font-weight: 800; color: var(--accent2); font-size: 0.85rem; flex-shrink: 0; }
         .repeat-btn { background: var(--surface3); border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; font-size: 0.72rem; font-weight: 700; color: var(--text2); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
         .repeat-btn:hover { background: var(--accent-glow); color: var(--accent2); border-color: var(--accent); }
-        .empty-riwayat { color: var(--text3); font-size: 0.78rem; font-style: italic; padding: 4px 0; }
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 20px;
+            text-align: center;
+            gap: 12px;
+        }
+        .empty-state-icon {
+            width: 64px; height: 64px;
+            background: var(--surface2);
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem;
+            color: var(--text3);
+            border: 1px solid var(--border);
+            margin-bottom: 4px;
+        }
+        .empty-state h3 { font-size: 0.95rem; font-weight: 700; color: var(--text2); }
+        .empty-state p { font-size: 0.78rem; color: var(--text3); line-height: 1.5; max-width: 220px; }
 
         /* ── BACK ROW ── */
         .back-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
@@ -480,99 +513,107 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
 
-        /* ── HELP BUTTON ── */
-        .help-btn {
-            background: rgba(108,99,255,0.12);
-            border: 1px solid rgba(108,99,255,0.25);
-            color: var(--accent2);
-            width: 34px; height: 34px;
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.18s;
-            flex-shrink: 0;
-            margin-left: 8px;
-        }
-        .help-btn:hover {
-            background: rgba(108,99,255,0.22);
-            border-color: var(--accent);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        /* ── BANTUAN MODAL ── */
-        .bantuan-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.72);
-            backdrop-filter: blur(6px);
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            z-index: 2000;
-            padding: 0;
-            animation: fadeInOverlay 0.2s ease;
-        }
-        .bantuan-sheet {
-            background: var(--surface);
-            border: 1px solid var(--border2);
-            border-radius: 28px 28px 0 0;
-            width: 100%;
-            max-width: 430px;
-            max-height: 88vh;
-            overflow-y: auto;
-            padding: 0 0 32px;
-            animation: slideUpSheet 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 -16px 48px rgba(0,0,0,0.6);
-        }
-        @keyframes slideUpSheet {
-            from { transform: translateY(100%); opacity: 0.6; }
-            to   { transform: translateY(0);    opacity: 1; }
-        }
-        .bantuan-handle {
-            width: 40px; height: 4px;
-            background: var(--surface3);
-            border-radius: 4px;
-            margin: 14px auto 0;
-        }
-        .bantuan-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 22px 16px;
+        /* ── PAGE HEADER (for sub-pages) ── */
+        .page-header {
+            padding: 20px 18px 16px;
             border-bottom: 1px solid var(--border);
-        }
-        .bantuan-header-left {
+            background: linear-gradient(135deg, #13131e 0%, #1a1428 100%);
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        .bantuan-header-icon {
+        .page-header-icon {
             width: 40px; height: 40px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
             border-radius: 13px;
             display: flex; align-items: center; justify-content: center;
             font-size: 1rem; color: white;
-            box-shadow: 0 4px 12px var(--accent-glow);
+            flex-shrink: 0;
         }
-        .bantuan-header-text h2 { font-size: 1rem; font-weight: 800; color: var(--text); }
-        .bantuan-header-text p  { font-size: 0.73rem; color: var(--text2); margin-top: 1px; }
-        .bantuan-close {
+        .page-header-icon.gold { background: linear-gradient(135deg, #d97706, var(--gold)); box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
+        .page-header-icon.purple { background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 4px 12px var(--accent-glow); }
+        .page-header-icon.green { background: linear-gradient(135deg, #16a34a, #22c55e); box-shadow: 0 4px 12px var(--green-glow); }
+        .page-header-text h2 { font-size: 1rem; font-weight: 800; color: var(--text); }
+        .page-header-text p { font-size: 0.73rem; color: var(--text2); margin-top: 1px; }
+        .page-header-count {
+            margin-left: auto;
+            background: var(--surface3);
+            border: 1px solid var(--border2);
+            color: var(--text2);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        /* ── FAVORIT PAGE ── */
+        .fav-page-list { display: flex; flex-direction: column; gap: 8px; }
+        .fav-page-item {
             background: var(--surface2);
             border: 1px solid var(--border);
-            color: var(--text2);
-            width: 32px; height: 32px;
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            font-size: 0.85rem;
+            border-radius: 14px;
+            padding: 13px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             transition: all 0.15s;
         }
-        .bantuan-close:hover { background: var(--surface3); color: var(--text); }
+        .fav-page-item:hover { border-color: var(--border2); background: var(--surface3); }
+        .fav-logo { width: 40px; height: 40px; border-radius: 12px; object-fit: contain; flex-shrink: 0; background: var(--surface3); }
+        .fav-info { flex: 1; min-width: 0; }
+        .fav-nominal { font-weight: 700; font-size: 0.88rem; color: var(--text); }
+        .fav-wallet { font-size: 0.73rem; color: var(--text2); margin-top: 2px; }
+        .fav-price { font-weight: 800; color: var(--accent2); font-size: 0.85rem; margin-bottom: 6px; }
+        .fav-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+        .fav-order-btn {
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .fav-order-btn:hover { transform: scale(1.03); }
+        .fav-del-btn {
+            background: rgba(248,113,113,0.1);
+            border: 1px solid rgba(248,113,113,0.2);
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--danger);
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .fav-del-btn:hover { background: rgba(248,113,113,0.2); }
+        .fav-star-icon { color: var(--gold); font-size: 0.8rem; flex-shrink: 0; }
 
-        /* ── STEPS ── */
-        .bantuan-section { padding: 20px 22px 0; }
+        /* ── CLEAR ALL BTN ── */
+        .clear-all-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(248,113,113,0.25);
+            background: rgba(248,113,113,0.07);
+            color: var(--danger);
+            font-weight: 700;
+            font-size: 0.82rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.15s;
+            margin-top: 14px;
+        }
+        .clear-all-btn:hover { background: rgba(248,113,113,0.14); border-color: rgba(248,113,113,0.4); }
+
+        /* ── BANTUAN PAGE ── */
+        .bantuan-section { padding: 18px 0 0; }
         .bantuan-section-title {
             font-size: 0.7rem;
             font-weight: 700;
@@ -586,13 +627,8 @@
         }
         .bantuan-section-title i { color: var(--accent2); }
         .bantuan-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
         .steps-list { display: flex; flex-direction: column; gap: 10px; }
-        .step-item {
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-        }
+        .step-item { display: flex; gap: 14px; align-items: flex-start; }
         .step-num {
             width: 28px; height: 28px;
             background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -608,68 +644,35 @@
         .step-content { flex: 1; }
         .step-title { font-weight: 700; font-size: 0.88rem; color: var(--text); margin-bottom: 2px; }
         .step-desc  { font-size: 0.78rem; color: var(--text2); line-height: 1.5; }
-
-        /* ── JAM OPS ── */
-        .jam-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        .jam-card {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 13px 14px;
-        }
+        .jam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .jam-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 13px 14px; }
         .jam-day   { font-size: 0.75rem; font-weight: 700; color: var(--text2); margin-bottom: 4px; }
         .jam-time  { font-size: 0.9rem; font-weight: 800; color: var(--text); }
         .jam-time.open  { color: var(--green); }
-        .jam-time.close { color: var(--danger); }
         .jam-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-top: 5px;
+            display: inline-flex; align-items: center; gap: 5px;
+            font-size: 0.68rem; font-weight: 700;
+            padding: 2px 8px; border-radius: 20px; margin-top: 5px;
         }
         .jam-status.buka  { background: rgba(34,197,94,0.12); color: var(--green); }
-        .jam-status.tutup { background: rgba(248,113,113,0.12); color: var(--danger); }
-
-        /* ── KONTAK ADMIN ── */
         .kontak-list { display: flex; flex-direction: column; gap: 8px; }
         .kontak-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 13px 14px;
-            cursor: pointer;
-            text-decoration: none;
+            display: flex; align-items: center; gap: 12px;
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 14px; padding: 13px 14px;
+            cursor: pointer; text-decoration: none;
             transition: all 0.15s;
         }
         .kontak-item:hover { border-color: var(--border2); background: var(--surface3); transform: translateX(2px); }
-        .kontak-icon {
-            width: 38px; height: 38px;
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
+        .kontak-icon { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
         .kontak-icon.wa    { background: rgba(37,211,102,0.15); color: var(--wa); }
         .kontak-icon.phone { background: rgba(108,99,255,0.12); color: var(--accent2); }
         .kontak-info { flex: 1; }
         .kontak-label { font-size: 0.72rem; color: var(--text2); font-weight: 500; }
         .kontak-value { font-size: 0.9rem; font-weight: 700; color: var(--text); }
         .kontak-arrow { color: var(--text3); font-size: 0.8rem; }
-
-        /* ── BANTUAN FOOTER ── */
         .bantuan-footer {
-            margin: 20px 22px 0;
+            margin-top: 18px;
             background: rgba(108,99,255,0.07);
             border: 1px solid rgba(108,99,255,0.15);
             border-radius: 14px;
@@ -686,6 +689,7 @@
 </head>
 <body>
 <div id="app">
+    <!-- ── APP HEADER ── -->
     <div class="app-header">
         <div class="header-top">
             <div class="header-icon"><i class="fas fa-bolt"></i></div>
@@ -694,230 +698,264 @@
                 <div class="sub">Belanja Aman, Cepat, Garansi Uang Kembali</div>
             </div>
             <div class="header-badge">✓ RESMI</div>
-            <button class="help-btn" id="helpBtn" title="Bantuan"><i class="fas fa-circle-question"></i></button>
         </div>
     </div>
 
-    <div id="app-views-container">
-        <!-- HOME VIEW -->
-        <div id="homeView" class="view">
-            <!-- Kategori Tabs -->
-            <div class="category-tabs" id="categoryTabs" style="margin: -18px -18px 18px; padding: 0 18px;">
-                <button class="cat-tab active" data-cat="ewallet">
-                    <i class="fas fa-wallet"></i> E-Wallet
-                    <span class="tab-count" id="ewalletCount">5</span>
-                </button>
-                <button class="cat-tab" data-cat="pulsa">
-                    <i class="fas fa-sim-card"></i> Pulsa
-                    <span class="tab-count" id="pulsaCount">7</span>
-                </button>
-            </div>
-
-            <!-- Favorit -->
-            <div class="favorit-strip" id="favoritStrip">
-                <div class="section-label" style="margin-bottom: 10px;">
-                    <i class="fas fa-star"></i> Favorit
-                    <span class="section-label-action" id="clearFavBtn" style="display:none;" onclick="clearAllFavorites()">Hapus semua</span>
-                </div>
-                <div class="favorit-items" id="favoritItems">
-                    <span class="no-fav">Belum ada favorit</span>
-                </div>
-            </div>
-
-            <!-- Riwayat -->
-            <div id="riwayatSection">
-                <div class="section-label"><i class="fas fa-clock-rotate-left"></i> Riwayat Pesanan</div>
-                <div class="riwayat-list" id="riwayatList">
-                    <span class="empty-riwayat">Belum ada riwayat</span>
-                </div>
-            </div>
-
-            <div class="section-label"><i class="fas fa-hand-pointer"></i> Pilih Produk</div>
-            <div class="ewallet-grid" id="ewalletGrid"></div>
-        </div>
-
-        <!-- NOMINAL VIEW -->
-        <div id="nominalView" class="view hidden">
-            <div class="back-row">
-                <button class="back-btn" id="backToHomeBtn"><i class="fas fa-arrow-left"></i></button>
-                <div id="selectedWalletBadge" class="selected-wallet-badge"></div>
-            </div>
-
-            <div class="field-group">
-                <div class="field-label"><i class="fas fa-mobile-alt"></i> Nomor Handphone</div>
-                <div class="phone-field">
-                    <input type="tel" id="phoneInput" placeholder="08xxxxxxx" value="">
-                    <button class="contact-btn" id="contactPickerBtn"><i class="fas fa-address-book"></i> Kontak</button>
-                </div>
-                <div id="phoneError" class="error-msg"></div>
-            </div>
-
-            <div class="inline-controls">
-                <button class="ewallet-nav-btn" id="pilihEwalletBtn"><i class="fas fa-grid-2"></i> Ganti</button>
-                <div class="kategori-dropdown">
-                    <select id="kategoriSelect"></select>
-                </div>
-            </div>
-
-            <!-- Pencarian Nominal -->
-            <div class="nominal-search-wrap">
-                <div class="search-bar" id="nominalSearchBar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="nominalSearch" placeholder="Cari nominal... (misal: 50.000)">
-                    <button class="search-clear" id="nominalSearchClear"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
-
-            <div class="section-label"><i class="fas fa-tag"></i> Pilih Nominal</div>
-            <div id="productListContainer" class="product-list"></div>
-
-            <button class="next-btn" id="goToDetailBtn" disabled>
-                <span>LANJUT KE DETAIL</span>
-                <div class="btn-icon-wrap"><i class="fas fa-arrow-right"></i></div>
+    <!-- ── PAGE: BERANDA ── -->
+    <div id="pageHome" class="page-anim">
+        <!-- Category Tabs -->
+        <div class="category-tabs" id="categoryTabs" style="margin: 0 0 0; padding: 0 18px;">
+            <button class="cat-tab active" data-cat="ewallet">
+                <i class="fas fa-wallet"></i> E-Wallet
+                <span class="tab-count" id="ewalletCount">5</span>
+            </button>
+            <button class="cat-tab" data-cat="pulsa">
+                <i class="fas fa-sim-card"></i> Pulsa
+                <span class="tab-count" id="pulsaCount">7</span>
+            </button>
+            <button class="cat-tab" data-cat="alat">
+                <i class="fas fa-toolbox"></i> Alat
+                <span class="tab-count" id="alatCount">2</span>
             </button>
         </div>
 
-        <!-- DETAIL VIEW -->
-        <div id="detailView" class="view hidden">
-            <div class="back-row">
-                <button class="back-btn" id="backToNominalBtn"><i class="fas fa-arrow-left"></i></button>
-                <span class="back-row-title">Detail Pesanan</span>
+        <div id="app-views-container">
+            <!-- HOME VIEW -->
+            <div id="homeView" class="view">
+                <div class="section-label"><i class="fas fa-hand-pointer"></i> Pilih Produk</div>
+                <div class="ewallet-grid" id="ewalletGrid"></div>
             </div>
 
-            <div class="estimasi-strip">
-                <i class="fas fa-clock"></i>
-                Estimasi proses: <strong>1–5 menit</strong>
-            </div>
-
-            <div class="detail-card" id="detailCard"></div>
-
-            <div class="name-field">
-                <div class="name-field-wrap">
-                    <input type="text" id="customerNameInput" placeholder="Nama kamu (opsional)">
+            <!-- NOMINAL VIEW -->
+            <div id="nominalView" class="view hidden">
+                <div class="back-row">
+                    <button class="back-btn" id="backToHomeBtn"><i class="fas fa-arrow-left"></i></button>
+                    <div id="selectedWalletBadge" class="selected-wallet-badge"></div>
                 </div>
+
+                <div class="field-group">
+                    <div class="field-label"><i class="fas fa-mobile-alt"></i> Nomor Handphone</div>
+                    <div class="phone-field">
+                        <input type="tel" id="phoneInput" placeholder="08xxxxxxx" value="">
+                        <button class="contact-btn" id="contactPickerBtn"><i class="fas fa-address-book"></i> Kontak</button>
+                    </div>
+                    <div id="phoneError" class="error-msg"></div>
+                </div>
+
+                <div class="inline-controls">
+                    <button class="ewallet-nav-btn" id="pilihEwalletBtn"><i class="fas fa-grid-2"></i> Ganti</button>
+                    <div class="kategori-dropdown">
+                        <select id="kategoriSelect"></select>
+                    </div>
+                </div>
+
+                <div class="nominal-search-wrap">
+                    <div class="search-bar" id="nominalSearchBar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="nominalSearch" placeholder="Cari nominal... (misal: 50.000)">
+                        <button class="search-clear" id="nominalSearchClear"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+
+                <div class="section-label"><i class="fas fa-tag"></i> Pilih Nominal</div>
+                <div id="productListContainer" class="product-list"></div>
+
+                <button class="next-btn" id="goToDetailBtn" disabled>
+                    <span>LANJUT KE DETAIL</span>
+                    <div class="btn-icon-wrap"><i class="fas fa-arrow-right"></i></div>
+                </button>
             </div>
 
-            <div class="section-label"><i class="fas fa-qrcode"></i> Pembayaran QRIS</div>
-            <div class="qris-area">
-                <div class="qris-label">Scan untuk membayar</div>
-                <img src="https://i.postimg.cc/FKBx2LFj/quick-response-code-indonesia-standard-qris-logo-png-seeklogo-391791.png" alt="QRIS Standard" id="qrisImage">
-                <div class="qris-amount">Rp <span id="qrisAmount"></span></div>
-            </div>
+            <!-- DETAIL VIEW -->
+            <div id="detailView" class="view hidden">
+                <div class="back-row">
+                    <button class="back-btn" id="backToNominalBtn"><i class="fas fa-arrow-left"></i></button>
+                    <span class="back-row-title">Detail Pesanan</span>
+                </div>
 
-            <button class="buy-btn" id="beliSekarangBtn">
-                <span>BELI SEKARANG</span>
-                <div class="btn-icon-wrap"><i class="fab fa-whatsapp"></i></div>
-            </button>
-            <div id="whatsappNotif" class="whatsapp-notif hidden"></div>
+                <div class="estimasi-strip">
+                    <i class="fas fa-clock"></i>
+                    Estimasi proses: <strong>1–5 menit</strong>
+                </div>
+
+                <div class="detail-card" id="detailCard"></div>
+
+                <div class="name-field">
+                    <div class="name-field-wrap">
+                        <input type="text" id="customerNameInput" placeholder="Nama kamu (opsional)">
+                    </div>
+                </div>
+
+                <div class="section-label"><i class="fas fa-qrcode"></i> Pembayaran QRIS</div>
+                <div class="qris-area">
+                    <div class="qris-label">Scan untuk membayar</div>
+                    <img src="https://i.postimg.cc/FKBx2LFj/quick-response-code-indonesia-standard-qris-logo-png-seeklogo-391791.png" alt="QRIS Standard" id="qrisImage">
+                    <div class="qris-amount">Rp <span id="qrisAmount"></span></div>
+                </div>
+
+                <button class="buy-btn" id="beliSekarangBtn">
+                    <span>BELI SEKARANG</span>
+                    <div class="btn-icon-wrap"><i class="fab fa-whatsapp"></i></div>
+                </button>
+                <div id="whatsappNotif" class="whatsapp-notif hidden"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- BANTUAN MODAL -->
-<div id="bantuanModal" class="bantuan-modal hidden">
-    <div class="bantuan-sheet">
-        <div class="bantuan-handle"></div>
-        <div class="bantuan-header">
-            <div class="bantuan-header-left">
-                <div class="bantuan-header-icon"><i class="fas fa-headset"></i></div>
-                <div class="bantuan-header-text">
-                    <h2>Pusat Bantuan</h2>
-                    <p>Cara order, kontak & jam layanan</p>
-                </div>
+    <!-- ── PAGE: FAVORIT ── -->
+    <div id="pageFavorit" class="page-anim hidden">
+        <div class="page-header">
+            <div class="page-header-icon gold"><i class="fas fa-star"></i></div>
+            <div class="page-header-text">
+                <h2>Favorit Saya</h2>
+                <p>Nominal yang sering kamu pesan</p>
             </div>
-            <button class="bantuan-close" id="bantuanClose"><i class="fas fa-times"></i></button>
+            <span class="page-header-count" id="favCount">0 item</span>
         </div>
+        <div style="padding: 18px 18px 28px;">
+            <div id="favPageContent"></div>
+        </div>
+    </div>
 
-        <!-- CARA ORDER -->
-        <div class="bantuan-section">
-            <div class="bantuan-section-title"><i class="fas fa-list-ol"></i> Cara Order</div>
-            <div class="steps-list">
-                <div class="step-item">
-                    <div class="step-num">1</div>
-                    <div class="step-content">
-                        <div class="step-title">Pilih Kategori & Produk</div>
-                        <div class="step-desc">Pilih tab E-Wallet atau Pulsa, lalu klik produk yang ingin kamu isi saldo-nya.</div>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">2</div>
-                    <div class="step-content">
-                        <div class="step-title">Masukkan Nomor HP</div>
-                        <div class="step-desc">Isi nomor tujuan (format 08xx atau 628xx). Kamu bisa ambil dari daftar kontak langsung.</div>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">3</div>
-                    <div class="step-content">
-                        <div class="step-title">Pilih Nominal</div>
-                        <div class="step-desc">Pilih nominal yang diinginkan. Gunakan kolom pencarian jika produknya banyak.</div>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">4</div>
-                    <div class="step-content">
-                        <div class="step-title">Cek Detail & Bayar QRIS</div>
-                        <div class="step-desc">Pastikan semua data benar, lalu scan QRIS untuk melakukan pembayaran.</div>
-                    </div>
-                </div>
-                <div class="step-item">
-                    <div class="step-num">5</div>
-                    <div class="step-content">
-                        <div class="step-title">Kirim via WhatsApp</div>
-                        <div class="step-desc">Klik "Beli Sekarang" — pesanan otomatis terkirim ke admin via WA. Proses 1–5 menit.</div>
-                    </div>
-                </div>
+    <!-- ── PAGE: RIWAYAT ── -->
+    <div id="pageRiwayat" class="page-anim hidden">
+        <div class="page-header">
+            <div class="page-header-icon purple"><i class="fas fa-clock-rotate-left"></i></div>
+            <div class="page-header-text">
+                <h2>Riwayat Pesanan</h2>
+                <p>Semua transaksi yang pernah dibuat</p>
+            </div>
+            <span class="page-header-count" id="riwCount">0 item</span>
+        </div>
+        <div style="padding: 18px 18px 28px;">
+            <div id="riwPageContent"></div>
+        </div>
+    </div>
+
+    <!-- ── PAGE: BANTUAN ── -->
+    <div id="pageBantuan" class="page-anim hidden">
+        <div class="page-header">
+            <div class="page-header-icon green"><i class="fas fa-headset"></i></div>
+            <div class="page-header-text">
+                <h2>Pusat Bantuan</h2>
+                <p>Cara order, kontak & jam layanan</p>
             </div>
         </div>
+        <div style="padding: 18px 18px 28px;">
 
-        <!-- JAM OPERASIONAL -->
-        <div class="bantuan-section" style="margin-top: 22px;">
-            <div class="bantuan-section-title"><i class="fas fa-clock"></i> Jam Operasional</div>
-            <div class="jam-grid">
-                <div class="jam-card">
-                    <div class="jam-day">Senin – Jumat</div>
-                    <div class="jam-time open">08.00 – 22.00</div>
-                    <span class="jam-status buka"><i class="fas fa-circle" style="font-size:0.45rem;"></i> Buka</span>
-                </div>
-                <div class="jam-card">
-                    <div class="jam-day">Sabtu – Minggu</div>
-                    <div class="jam-time open">09.00 – 21.00</div>
-                    <span class="jam-status buka"><i class="fas fa-circle" style="font-size:0.45rem;"></i> Buka</span>
-                </div>
-                <div class="jam-card" style="grid-column: 1 / -1;">
-                    <div class="jam-day">Hari Libur Nasional</div>
-                    <div class="jam-time" style="color:var(--text2);">Menyesuaikan</div>
+            <!-- CARA ORDER -->
+            <div class="bantuan-section">
+                <div class="bantuan-section-title"><i class="fas fa-list-ol"></i> Cara Order</div>
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Pilih Kategori & Produk</div>
+                            <div class="step-desc">Pilih tab E-Wallet, Pulsa, atau Alat, lalu klik produk yang diinginkan.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Masukkan Nomor HP</div>
+                            <div class="step-desc">Isi nomor tujuan (format 08xx atau 628xx). Bisa ambil dari daftar kontak langsung.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Pilih Nominal</div>
+                            <div class="step-desc">Pilih nominal yang diinginkan. Gunakan kolom pencarian jika produknya banyak.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Cek Detail & Bayar QRIS</div>
+                            <div class="step-desc">Pastikan semua data benar, lalu scan QRIS untuk melakukan pembayaran.</div>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <div class="step-title">Kirim via WhatsApp</div>
+                            <div class="step-desc">Klik "Beli Sekarang" — pesanan otomatis terkirim ke admin via WA. Proses 1–5 menit.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- KONTAK ADMIN -->
-        <div class="bantuan-section" style="margin-top: 22px;">
-            <div class="bantuan-section-title"><i class="fas fa-address-book"></i> Kontak Admin</div>
-            <div class="kontak-list">
-                <a class="kontak-item" id="kontakWA" href="#" onclick="return false;">
-                    <div class="kontak-icon wa"><i class="fab fa-whatsapp"></i></div>
-                    <div class="kontak-info">
-                        <div class="kontak-label">WhatsApp Admin</div>
-                        <div class="kontak-value">+62 851-7827-1400</div>
+            <!-- JAM OPERASIONAL -->
+            <div class="bantuan-section" style="margin-top: 22px;">
+                <div class="bantuan-section-title"><i class="fas fa-clock"></i> Jam Operasional</div>
+                <div class="jam-grid">
+                    <div class="jam-card">
+                        <div class="jam-day">Senin – Jumat</div>
+                        <div class="jam-time open">08.00 – 22.00</div>
+                        <span class="jam-status buka"><i class="fas fa-circle" style="font-size:0.45rem;"></i> Buka</span>
                     </div>
-                    <i class="fas fa-chevron-right kontak-arrow"></i>
-                </a>
-                <a class="kontak-item" id="kontakCall" href="tel:+6285178271400">
-                    <div class="kontak-icon phone"><i class="fas fa-phone"></i></div>
-                    <div class="kontak-info">
-                        <div class="kontak-label">Telepon / SMS</div>
-                        <div class="kontak-value">+62 851-7827-1400</div>
+                    <div class="jam-card">
+                        <div class="jam-day">Sabtu – Minggu</div>
+                        <div class="jam-time open">09.00 – 21.00</div>
+                        <span class="jam-status buka"><i class="fas fa-circle" style="font-size:0.45rem;"></i> Buka</span>
                     </div>
-                    <i class="fas fa-chevron-right kontak-arrow"></i>
-                </a>
+                    <div class="jam-card" style="grid-column: 1 / -1;">
+                        <div class="jam-day">Hari Libur Nasional</div>
+                        <div class="jam-time" style="color:var(--text2);">Menyesuaikan</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KONTAK ADMIN -->
+            <div class="bantuan-section" style="margin-top: 22px;">
+                <div class="bantuan-section-title"><i class="fas fa-address-book"></i> Kontak Admin</div>
+                <div class="kontak-list">
+                    <a class="kontak-item" id="kontakWA" href="#" onclick="return false;">
+                        <div class="kontak-icon wa"><i class="fab fa-whatsapp"></i></div>
+                        <div class="kontak-info">
+                            <div class="kontak-label">WhatsApp Admin</div>
+                            <div class="kontak-value">+62 851-7827-1400</div>
+                        </div>
+                        <i class="fas fa-chevron-right kontak-arrow"></i>
+                    </a>
+                    <a class="kontak-item" id="kontakCall" href="tel:+6285178271400">
+                        <div class="kontak-icon phone"><i class="fas fa-phone"></i></div>
+                        <div class="kontak-info">
+                            <div class="kontak-label">Telepon / SMS</div>
+                            <div class="kontak-value">+62 851-7827-1400</div>
+                        </div>
+                        <i class="fas fa-chevron-right kontak-arrow"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bantuan-footer">
+                <i class="fas fa-shield-halved"></i>
+                <span>Transaksi dijamin aman. Jika dalam <strong>15 menit</strong> pesanan belum diproses, segera hubungi admin.</span>
             </div>
         </div>
+    </div>
 
-        <div class="bantuan-footer">
-            <i class="fas fa-shield-halved"></i>
-            <span>Transaksi dijamin aman. Jika dalam <strong>15 menit</strong> pesanan belum diproses, segera hubungi admin.</span>
-        </div>
+    <!-- ── BOTTOM NAVIGATION ── -->
+    <div class="bottom-nav">
+        <button class="nav-item active" data-page="home" id="navHome">
+            <i class="fas fa-house"></i>
+            <span>Beranda</span>
+        </button>
+        <button class="nav-item" data-page="favorit" id="navFavorit">
+            <i class="fas fa-star"></i>
+            <span>Favorit</span>
+            <span class="nav-badge hidden" id="favBadge">0</span>
+        </button>
+        <button class="nav-item" data-page="riwayat" id="navRiwayat">
+            <i class="fas fa-clock-rotate-left"></i>
+            <span>Riwayat</span>
+            <span class="nav-badge hidden" id="riwBadge">0</span>
+        </button>
+        <button class="nav-item" data-page="bantuan" id="navBantuan">
+            <i class="fas fa-circle-question"></i>
+            <span>Bantuan</span>
+        </button>
     </div>
 </div>
 
@@ -979,19 +1017,26 @@
         ]},
         { id: 'byu', name: 'by.U Transfer', cat: 'pulsa', badge: null, logo: 'https://i.postimg.cc/N0NRqSc9/983693495o.jpg', products: [
             { nominal: 'byU 30.000', price: 30660 }, { nominal: 'byU 35.000', price: 35210 }, { nominal: 'byU 40.000', price: 39770 }, { nominal: 'byU 45.000', price: 44320 }, { nominal: 'byU 50.000', price: 49370 }, { nominal: 'byU 55.000', price: 53820 }, { nominal: 'byU 60.000', price: 58480 }, { nominal: 'byU 65.000', price: 63030 }, { nominal: 'byU 70.000', price: 67490 }, { nominal: 'byU 75.000', price: 72040 }, { nominal: 'byU 80.000', price: 76590 }, { nominal: 'byU 85.000', price: 81150 }, { nominal: 'byU 90.000', price: 85700 }, { nominal: 'byU 95.000', price: 90260 }, { nominal: 'byU 100.000', price: 96890 }, { nominal: 'byU 125.000', price: 119660 }, { nominal: 'byU 150.000', price: 142430 }, { nominal: 'byU 200.000', price: 190640 }, { nominal: 'byU 300.000', price: 294790 }, { nominal: 'byU 500.000', price: 484870 }
+        ]},
+        { id: 'gmailfresh', name: 'Gmail Fresh', cat: 'alat', badge: 'baru', logo: 'https://i.postimg.cc/7hrMS21s/62-851-7827-1400-20260325-212134.jpg', products: [
+            { nominal: 'Gmail Fresh 1 Akun', price: 5000 }, { nominal: 'Gmail Fresh 3 Akun', price: 13000 }, { nominal: 'Gmail Fresh 5 Akun', price: 20000 }, { nominal: 'Gmail Fresh 10 Akun', price: 35000 }, { nominal: 'Gmail Fresh 20 Akun', price: 65000 }, { nominal: 'Gmail Fresh 50 Akun', price: 150000 }
+        ]},
+        { id: 'nokos', name: 'Nokos', cat: 'alat', badge: 'baru', logo: 'https://i.postimg.cc/8k9sSp3h/fd67a793b14ea0d61a97f9b21fb64207.jpg', products: [
+            { nominal: 'Nokos 1 Akun', price: 5000 }
         ]}
     ];
 
     // ── STATE ──
     let currentView = 'home';
+    let currentPage = 'home';
     let selectedEwallet = null;
     let selectedProduct = null;
     let phoneNumber = '';
     let currentCategory = 'ewallet';
-    let favorites = JSON.parse(localStorage.getItem('topup_favorites') || '[]'); // [{walletId, nominal, price}]
-    let riwayat = JSON.parse(localStorage.getItem('topup_riwayat') || '[]'); // [{walletId, walletName, logo, nominal, price, hp, ts}]
+    let favorites = JSON.parse(localStorage.getItem('topup_favorites') || '[]');
+    let riwayat = JSON.parse(localStorage.getItem('topup_riwayat') || '[]');
 
-    // Prevent copy
+    // Prevent copy / right-click
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) e.preventDefault(); });
     document.addEventListener('copy', e => e.preventDefault());
@@ -1023,12 +1068,50 @@
     const modalCancel = document.getElementById('modalCancel');
     const modalConfirm = document.getElementById('modalConfirm');
     const modalSummary = document.getElementById('modalSummary');
-    const favoritItems = document.getElementById('favoritItems');
-    const riwayatList = document.getElementById('riwayatList');
-    const clearFavBtn = document.getElementById('clearFavBtn');
 
-    // ── TABS ──
-    document.getElementById('categoryTabs').addEventListener('click', e => {
+    // ── PAGE NAVIGATION ──
+    const pages = {
+        home: document.getElementById('pageHome'),
+        favorit: document.getElementById('pageFavorit'),
+        riwayat: document.getElementById('pageRiwayat'),
+        bantuan: document.getElementById('pageBantuan'),
+    };
+    const categoryTabsEl = document.getElementById('categoryTabs');
+
+    function switchPage(page) {
+        if (currentPage === page) return;
+        // Hide all pages
+        Object.values(pages).forEach(p => p.classList.add('hidden'));
+        // Show target
+        pages[page].classList.remove('hidden');
+        pages[page].classList.remove('page-anim');
+        void pages[page].offsetWidth; // reflow
+        pages[page].classList.add('page-anim');
+        currentPage = page;
+
+        // Update nav
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+
+        // Show/hide category tabs (only on home)
+        categoryTabsEl.style.display = page === 'home' ? 'flex' : 'none';
+
+        // Render page content
+        if (page === 'favorit') renderFavPage();
+        if (page === 'riwayat') renderRiwPage();
+
+        // Reset inner view when returning to home
+        if (page === 'home' && currentView !== 'home') {
+            switchView('home', 'back');
+        }
+    }
+
+    document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.addEventListener('click', () => switchPage(btn.dataset.page));
+    });
+
+    // ── CATEGORY TABS ──
+    categoryTabsEl.addEventListener('click', e => {
         const tab = e.target.closest('.cat-tab');
         if (!tab) return;
         document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
@@ -1040,6 +1123,7 @@
     function updateTabCounts() {
         document.getElementById('ewalletCount').textContent = ewalletData.filter(w => w.cat === 'ewallet').length;
         document.getElementById('pulsaCount').textContent = ewalletData.filter(w => w.cat === 'pulsa').length;
+        document.getElementById('alatCount').textContent = ewalletData.filter(w => w.cat === 'alat').length;
     }
 
     // ── VALIDATION ──
@@ -1076,13 +1160,13 @@
     function getFavKey(walletId, nominal) { return walletId + '||' + nominal; }
     function isFav(walletId, nominal) { return favorites.some(f => getFavKey(f.walletId, f.nominal) === getFavKey(walletId, nominal)); }
     function saveFavorites() { localStorage.setItem('topup_favorites', JSON.stringify(favorites)); }
+
     function toggleFavorite(walletId, nominal, price) {
         const key = getFavKey(walletId, nominal);
         const idx = favorites.findIndex(f => getFavKey(f.walletId, f.nominal) === key);
-        if (idx >= 0) { favorites.splice(idx, 1); } else { favorites.unshift({ walletId, nominal, price }); if (favorites.length > 8) favorites = favorites.slice(0, 8); }
+        if (idx >= 0) { favorites.splice(idx, 1); } else { favorites.unshift({ walletId, nominal, price }); if (favorites.length > 20) favorites = favorites.slice(0, 20); }
         saveFavorites();
-        renderFavorites();
-        // refresh fav toggles in product list
+        updateBadges();
         document.querySelectorAll('.fav-toggle').forEach(el => {
             if (el.dataset.walletId === walletId && el.dataset.nominal === nominal) {
                 el.classList.toggle('is-fav', isFav(walletId, nominal));
@@ -1090,35 +1174,77 @@
             }
         });
     }
-    window.clearAllFavorites = function() { favorites = []; saveFavorites(); renderFavorites(); };
 
-    function renderFavorites() {
+    function renderFavPage() {
+        const container = document.getElementById('favPageContent');
+        const countEl = document.getElementById('favCount');
+        countEl.textContent = favorites.length + ' item';
         if (favorites.length === 0) {
-            favoritItems.innerHTML = '<span class="no-fav">Belum ada favorit — bintangi nominal favorit kamu</span>';
-            clearFavBtn.style.display = 'none';
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon"><i class="fas fa-star"></i></div>
+                    <h3>Belum Ada Favorit</h3>
+                    <p>Bintangi nominal favoritmu saat memilih produk di halaman Beranda.</p>
+                </div>`;
             return;
         }
-        clearFavBtn.style.display = '';
-        favoritItems.innerHTML = '';
-        favorites.forEach(f => {
+        let html = '<div class="fav-page-list">';
+        favorites.forEach((f, idx) => {
             const wallet = ewalletData.find(w => w.id === f.walletId);
             if (!wallet) return;
-            const chip = document.createElement('button');
-            chip.className = 'fav-chip';
-            chip.innerHTML = `<i class="fas fa-star"></i>${f.nominal} <span class="fav-chip-wallet">${wallet.name}</span>`;
-            chip.addEventListener('click', () => {
+            html += `
+                <div class="fav-page-item">
+                    <i class="fas fa-star fav-star-icon"></i>
+                    <img class="fav-logo" src="${wallet.logo}" alt="${wallet.name}">
+                    <div class="fav-info">
+                        <div class="fav-nominal">${f.nominal}</div>
+                        <div class="fav-wallet">${wallet.name}</div>
+                    </div>
+                    <div class="fav-actions">
+                        <span class="fav-price">Rp ${f.price.toLocaleString('id-ID')}</span>
+                        <button class="fav-order-btn" data-idx="${idx}"><i class="fas fa-bolt"></i> Order</button>
+                        <button class="fav-del-btn" data-idx="${idx}"><i class="fas fa-trash-alt"></i> Hapus</button>
+                    </div>
+                </div>`;
+        });
+        html += '</div>';
+        html += `<button class="clear-all-btn" id="clearAllFavBtn"><i class="fas fa-trash"></i> Hapus Semua Favorit</button>`;
+        container.innerHTML = html;
+
+        container.querySelectorAll('.fav-order-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const f = favorites[+btn.dataset.idx];
+                const wallet = ewalletData.find(w => w.id === f.walletId);
+                if (!wallet) return;
                 selectedEwallet = wallet;
                 selectedProduct = { nominal: f.nominal, price: f.price };
-                phoneNumber = phoneInput.value.trim();
-                switchView('nominal', 'forward');
+                switchPage('home');
                 setTimeout(() => {
-                    // Auto-select the product
-                    document.querySelectorAll('.product-item').forEach(el => {
-                        if (el.dataset.nominal === f.nominal) { el.click(); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-                    });
-                }, 350);
+                    switchView('nominal', 'forward');
+                    setTimeout(() => {
+                        document.querySelectorAll('.product-item').forEach(el => {
+                            if (el.dataset.nominal === f.nominal) { el.click(); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+                        });
+                    }, 350);
+                }, 50);
             });
-            favoritItems.appendChild(chip);
+        });
+
+        container.querySelectorAll('.fav-del-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                favorites.splice(+btn.dataset.idx, 1);
+                saveFavorites();
+                updateBadges();
+                renderFavPage();
+            });
+        });
+
+        const clearBtn = document.getElementById('clearAllFavBtn');
+        if (clearBtn) clearBtn.addEventListener('click', () => {
+            favorites = [];
+            saveFavorites();
+            updateBadges();
+            renderFavPage();
         });
     }
 
@@ -1126,57 +1252,91 @@
     function saveRiwayat() { localStorage.setItem('topup_riwayat', JSON.stringify(riwayat)); }
     function addRiwayat(entry) {
         riwayat.unshift(entry);
-        if (riwayat.length > 5) riwayat = riwayat.slice(0, 5);
+        if (riwayat.length > 20) riwayat = riwayat.slice(0, 20);
         saveRiwayat();
+        updateBadges();
     }
     function formatTanggal(ts) {
         const d = new Date(ts);
-        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ', ' +
+               d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
     }
-    function renderRiwayat() {
+
+    function renderRiwPage() {
+        const container = document.getElementById('riwPageContent');
+        const countEl = document.getElementById('riwCount');
+        countEl.textContent = riwayat.length + ' item';
         if (riwayat.length === 0) {
-            riwayatList.innerHTML = '<span class="empty-riwayat">Belum ada riwayat pesanan</span>';
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon"><i class="fas fa-clock-rotate-left"></i></div>
+                    <h3>Belum Ada Riwayat</h3>
+                    <p>Semua pesanan yang pernah kamu buat akan muncul di sini.</p>
+                </div>`;
             return;
         }
-        riwayatList.innerHTML = '';
-        riwayat.forEach(r => {
-            const item = document.createElement('div');
-            item.className = 'riwayat-item';
-            item.innerHTML = `
-                <img class="riwayat-logo" src="${r.logo}" alt="${r.walletName}">
-                <div class="riwayat-info">
-                    <div class="riwayat-top">${r.nominal}</div>
-                    <div class="riwayat-bot">
-                        ${r.walletName}
-                        <span class="riwayat-dot"></span>
-                        ${r.hp}
-                        <span class="riwayat-dot"></span>
-                        ${formatTanggal(r.ts)}
+        let html = '<div class="riwayat-list">';
+        riwayat.forEach((r, idx) => {
+            html += `
+                <div class="riwayat-item">
+                    <img class="riwayat-logo" src="${r.logo}" alt="${r.walletName}">
+                    <div class="riwayat-info">
+                        <div class="riwayat-top">${r.nominal}</div>
+                        <div class="riwayat-bot">
+                            <span>${r.walletName}</span>
+                            <span class="riwayat-dot"></span>
+                            <span>${r.hp}</span>
+                            <span class="riwayat-dot"></span>
+                            <span>${formatTanggal(r.ts)}</span>
+                        </div>
                     </div>
-                </div>
-                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
-                    <span class="riwayat-price">Rp ${r.price.toLocaleString('id-ID')}</span>
-                    <button class="repeat-btn">Repeat</button>
-                </div>
-            `;
-            item.querySelector('.repeat-btn').addEventListener('click', e => {
-                e.stopPropagation();
+                    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
+                        <span class="riwayat-price">Rp ${r.price.toLocaleString('id-ID')}</span>
+                        <button class="repeat-btn" data-idx="${idx}"><i class="fas fa-rotate-right"></i> Repeat</button>
+                    </div>
+                </div>`;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+
+        container.querySelectorAll('.repeat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const r = riwayat[+btn.dataset.idx];
                 const wallet = ewalletData.find(w => w.id === r.walletId);
                 if (!wallet) return;
                 selectedEwallet = wallet;
                 selectedProduct = { nominal: r.nominal, price: r.price };
-                phoneNumber = r.hp;
-                switchView('nominal', 'forward');
+                switchPage('home');
                 setTimeout(() => {
-                    phoneInput.value = r.hp;
-                    updatePhoneValidation();
-                    document.querySelectorAll('.product-item').forEach(el => {
-                        if (el.dataset.nominal === r.nominal) { el.click(); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-                    });
-                }, 350);
+                    switchView('nominal', 'forward');
+                    setTimeout(() => {
+                        phoneInput.value = r.hp;
+                        updatePhoneValidation();
+                        document.querySelectorAll('.product-item').forEach(el => {
+                            if (el.dataset.nominal === r.nominal) { el.click(); el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+                        });
+                    }, 350);
+                }, 50);
             });
-            riwayatList.appendChild(item);
         });
+    }
+
+    // ── BADGES ──
+    function updateBadges() {
+        const favBadge = document.getElementById('favBadge');
+        const riwBadge = document.getElementById('riwBadge');
+        if (favorites.length > 0) {
+            favBadge.textContent = favorites.length;
+            favBadge.classList.remove('hidden');
+        } else {
+            favBadge.classList.add('hidden');
+        }
+        if (riwayat.length > 0) {
+            riwBadge.textContent = riwayat.length;
+            riwBadge.classList.remove('hidden');
+        } else {
+            riwBadge.classList.add('hidden');
+        }
     }
 
     // ── RENDER HOME ──
@@ -1187,89 +1347,88 @@
             const card = document.createElement('div');
             card.className = 'wallet-card';
             card.dataset.id = w.id;
-
-            let badgeHTML = '';
-            if (w.badge) { badgeHTML = `<span class="promo-badge ${w.badge}">${w.badge === 'terlaris' ? '🔥 Terlaris' : w.badge === 'hemat' ? '💚 Hemat' : '✨ Baru'}</span>`; }
-
-            card.innerHTML = `
-                ${badgeHTML}
-                <div class="wallet-logo-wrap">
-                    <div class="skeleton-logo" id="skel-${w.id}"></div>
-                    <img class="wallet-logo" src="${w.logo}" alt="${w.name}" id="logo-${w.id}">
-                </div>
-                <span class="wallet-name">${w.name}</span>
-            `;
-            // Skeleton loading
-            const img = card.querySelector(`#logo-${w.id}`);
-            const skel = card.querySelector(`#skel-${w.id}`);
-            img.onload = () => { img.classList.add('loaded'); skel.classList.add('hidden-skeleton'); };
-            img.onerror = () => { skel.classList.add('hidden-skeleton'); img.style.opacity = '0.3'; };
-
+            if (w.badge) {
+                const badgeEl = document.createElement('span');
+                badgeEl.className = `promo-badge ${w.badge}`;
+                const icons = { terlaris: '🔥', hemat: '💚', baru: '✨' };
+                badgeEl.textContent = `${icons[w.badge] || ''} ${w.badge}`;
+                card.appendChild(badgeEl);
+            }
+            const wrap = document.createElement('div');
+            wrap.className = 'wallet-logo-wrap';
+            const skeleton = document.createElement('div');
+            skeleton.className = 'skeleton-logo';
+            const img = document.createElement('img');
+            img.className = 'wallet-logo';
+            img.alt = w.name;
+            img.addEventListener('load', () => { img.classList.add('loaded'); skeleton.classList.add('hidden-skeleton'); });
+            img.addEventListener('error', () => { skeleton.classList.add('hidden-skeleton'); });
+            img.src = w.logo;
+            wrap.appendChild(skeleton);
+            wrap.appendChild(img);
+            const name = document.createElement('span');
+            name.className = 'wallet-name';
+            name.textContent = w.name;
+            card.appendChild(wrap);
+            card.appendChild(name);
             card.addEventListener('click', () => {
                 selectedEwallet = w;
                 selectedProduct = null;
-                phoneNumber = phoneInput.value.trim();
                 switchView('nominal', 'forward');
             });
             ewalletGrid.appendChild(card);
         });
-        renderFavorites();
-        renderRiwayat();
     }
 
-    // ── RENDER NOMINAL ──
+    // ── RENDER NOMINAL VIEW ──
     function renderNominalView() {
         if (!selectedEwallet) return;
-        selectedWalletBadge.innerHTML = `<img src="${selectedEwallet.logo}" alt="${selectedEwallet.name}"><span>${selectedEwallet.name}</span>`;
+        selectedWalletBadge.innerHTML = `
+            <img src="${selectedEwallet.logo}" alt="${selectedEwallet.name}">
+            <span>${selectedEwallet.name}</span>`;
 
+        // Build dropdown
         kategoriSelect.innerHTML = '';
-        ewalletData.forEach(w => {
-            const option = document.createElement('option');
-            option.value = w.id;
-            option.textContent = w.name;
-            if (selectedEwallet && w.id === selectedEwallet.id) option.selected = true;
-            kategoriSelect.appendChild(option);
+        ewalletData.filter(w => w.cat === selectedEwallet.cat).forEach(w => {
+            const opt = document.createElement('option');
+            opt.value = w.id;
+            opt.textContent = w.name;
+            if (w.id === selectedEwallet.id) opt.selected = true;
+            kategoriSelect.appendChild(opt);
         });
-        kategoriSelect.onchange = (e) => {
-            const newWallet = ewalletData.find(w => w.id === e.target.value);
-            if (newWallet) { selectedEwallet = newWallet; selectedProduct = null; nominalSearch.value = ''; nominalSearchClear.classList.remove('visible'); renderNominalProducts(); selectedWalletBadge.innerHTML = `<img src="${newWallet.logo}" alt="${newWallet.name}"><span>${newWallet.name}</span>`; }
+        kategoriSelect.onchange = () => {
+            const found = ewalletData.find(w => w.id === kategoriSelect.value);
+            if (found) { selectedEwallet = found; selectedProduct = null; goToDetailBtn.disabled = true; renderNominalProducts(); }
         };
-
-        phoneInput.value = phoneNumber;
-        goToDetailBtn.disabled = !selectedProduct;
-        updatePhoneValidation();
+        nominalSearch.value = '';
+        nominalSearchClear.classList.remove('visible');
         renderNominalProducts();
+        goToDetailBtn.disabled = !selectedProduct;
     }
 
     function renderNominalProducts(filter = '') {
         productListContainer.innerHTML = '';
-        const products = filter
-            ? selectedEwallet.products.filter(p => p.nominal.toLowerCase().includes(filter.toLowerCase()) || p.price.toString().includes(filter.replace(/\D/g, '')))
-            : selectedEwallet.products;
-
-        if (products.length === 0) {
-            productListContainer.innerHTML = `<div class="no-results"><i class="fas fa-search"></i>Nominal tidak ditemukan</div>`;
+        const products = selectedEwallet ? selectedEwallet.products : [];
+        const filtered = filter ? products.filter(p => p.nominal.toLowerCase().includes(filter.toLowerCase())) : products;
+        if (filtered.length === 0) {
+            productListContainer.innerHTML = '<div class="no-results"><i class="fas fa-search"></i>Tidak ada hasil</div>';
             return;
         }
-
-        // Mark some as promo for demo
-        const promoMap = {};
-        if (selectedEwallet.products.length > 5) {
-            const midIdx = Math.floor(selectedEwallet.products.length / 2);
-            promoMap[selectedEwallet.products[0]?.nominal] = 'hemat';
-            promoMap[selectedEwallet.products[midIdx]?.nominal] = 'terlaris';
-        }
-
-        products.forEach(p => {
+        const wallet = selectedEwallet;
+        const badge = wallet.badge;
+        filtered.forEach((p, i) => {
             const prodDiv = document.createElement('div');
-            prodDiv.className = `product-item ${selectedProduct && selectedProduct.nominal === p.nominal ? 'selected' : ''}`;
+            prodDiv.className = 'product-item';
             prodDiv.dataset.nominal = p.nominal;
+            if (selectedProduct && selectedProduct.nominal === p.nominal) prodDiv.classList.add('selected');
 
-            const promo = promoMap[p.nominal];
-            const favActive = isFav(selectedEwallet.id, p.nominal);
+            let promo = null;
+            if (badge === 'terlaris' && i < 3) promo = 'terlaris';
+            else if (badge === 'hemat' && i % 5 === 0) promo = 'hemat';
 
+            const favActive = isFav(wallet.id, p.nominal);
             prodDiv.innerHTML = `
-                <span class="fav-toggle ${favActive ? 'is-fav' : ''}" data-wallet-id="${selectedEwallet.id}" data-nominal="${p.nominal}" data-price="${p.price}">
+                <span class="fav-toggle ${favActive ? 'is-fav' : ''}" data-wallet-id="${wallet.id}" data-nominal="${p.nominal}" data-price="${p.price}">
                     ${favActive ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>'}
                 </span>
                 ${promo ? `<span class="product-promo ${promo}">${promo === 'terlaris' ? '🔥' : '💚'} ${promo}</span>` : ''}
@@ -1279,7 +1438,7 @@
 
             prodDiv.querySelector('.fav-toggle').addEventListener('click', e => {
                 e.stopPropagation();
-                toggleFavorite(selectedEwallet.id, p.nominal, p.price);
+                toggleFavorite(wallet.id, p.nominal, p.price);
             });
 
             prodDiv.addEventListener('click', () => {
@@ -1292,7 +1451,6 @@
         });
     }
 
-    // Nominal search
     nominalSearch.addEventListener('input', () => {
         const val = nominalSearch.value;
         nominalSearchClear.classList.toggle('visible', val.length > 0);
@@ -1330,7 +1488,7 @@
         whatsappNotif.classList.add('hidden');
     }
 
-    // ── SWITCH VIEW ──
+    // ── SWITCH INNER VIEW (within Beranda page) ──
     function switchView(view, direction = 'forward') {
         const views = { home: homeView, nominal: nominalView, detail: detailView };
         const current = views[currentView];
@@ -1372,7 +1530,6 @@
     }
 
     function closeWAModal() { waModal.classList.add('hidden'); }
-
     waModal.addEventListener('click', e => { if (e.target === waModal) closeWAModal(); });
     modalCancel.addEventListener('click', closeWAModal);
     modalConfirm.addEventListener('click', () => { closeWAModal(); doOpenWhatsApp(); });
@@ -1385,7 +1542,6 @@
         window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
         whatsappNotif.classList.remove('hidden');
         whatsappNotif.innerHTML = `<i class="fab fa-whatsapp"></i> Pesanan dikirim via WhatsApp ke +${CONFIG.WHATSAPP_NUMBER}<br><small>${selectedProduct.nominal}</small>`;
-        // Save riwayat
         addRiwayat({ walletId: selectedEwallet.id, walletName: selectedEwallet.name, logo: selectedEwallet.logo, nominal: selectedProduct.nominal, price: selectedProduct.price, hp: hp, ts: Date.now() });
     }
 
@@ -1416,22 +1572,17 @@
         }
     });
 
-    // ── BANTUAN MODAL ──
-    const bantuanModal = document.getElementById('bantuanModal');
-    const bantuanClose = document.getElementById('bantuanClose');
-    const helpBtn      = document.getElementById('helpBtn');
-    const kontakWA     = document.getElementById('kontakWA');
-
-    helpBtn.addEventListener('click', () => bantuanModal.classList.remove('hidden'));
-    bantuanClose.addEventListener('click', () => bantuanModal.classList.add('hidden'));
-    bantuanModal.addEventListener('click', e => { if (e.target === bantuanModal) bantuanModal.classList.add('hidden'); });
-    kontakWA.addEventListener('click', () => {
+    // ── BANTUAN KONTAK WA ──
+    document.getElementById('kontakWA').addEventListener('click', () => {
         window.open(`https://wa.me/${CONFIG.WHATSAPP_NUMBER}?text=${encodeURIComponent('Halo admin, saya butuh bantuan order top-up.')}`, '_blank');
     });
 
     // ── INIT ──
     updateTabCounts();
     renderHome();
+    updateBadges();
+    // Hide category tabs for non-home pages on init (they start hidden already)
+    categoryTabsEl.style.display = 'flex';
 })();
 </script>
 </body>
